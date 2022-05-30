@@ -2,8 +2,13 @@
   padding: 0;
   margin: 0;
 }
+#WrapAll {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
 #game{
-  width: 500px;
+  width: 100%;
   height: 260px;
   background-color: GoldenRod;
   position: absolute;
@@ -37,7 +42,7 @@
   top: 840px;
 }
 #keyboard{
-  width: 500px;
+  width: 100%;
   height: 200px;
   background-color: Khaki;
   border: 1px solid GoldenRod;
