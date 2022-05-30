@@ -131,6 +131,7 @@ function makeKey(c, x, y, w=35, h=35){
   if (c == "3"){
     c = "e";
     md = " onmousedown=\"enterPressed()\"";
+    document.getElementById("keyboard").style["top"] = (window.innerHeight - 200).toString() + "px";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "Green";
   }
@@ -242,12 +243,12 @@ function myFunction() {
   current = update(guess, goalSentence);
   //text = "Guess: " + guess;
   text = prettyPrint(["GUESS: " + Guess], "GUESS: " + Guess, 10);
-  text += prettyPrint(current, goalSentence, 90) + "<br/>";
+  text += prettyPrint(current, goalSentence, 130) + "<br/>";
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", 160);
+    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", 200);
   }
   else{
-    text += prettyPrint(["YOU WON"], "YOU WON", 160);
+    text += prettyPrint(["YOU WON"], "YOU WON", 200);
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
   //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
