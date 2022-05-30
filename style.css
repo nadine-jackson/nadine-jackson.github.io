@@ -1,0 +1,46 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+#game{
+  width: 1000px;
+  height: 200px;
+  background-color: GoldenRod;
+  position: absolute;
+  top: 100px;
+}
+#character{
+  width: 20px;
+  height: 20px;
+  background-color: teal;
+  left: 20px;
+  color: white;
+  text-align: center;
+  font-family: monospace,sans-serif;
+}
+#spacer{
+  width: 20px;
+  height: 20px;
+  background-color: gray;
+  position: absolute;
+  left: 20px;
+  top: 90px;
+  color: white;
+  text-align: center;
+  font-family: monospace,sans-serif;
+}
+#infobox{
+  width: 1000px;
+  background-color: Khaki;
+  border: 1px solid GoldenRod;
+  position: absolute;
+  top: 700px;
+}
+#keyboard{
+  width: 1000px;
+  height: 200px;
+  background-color: Khaki;
+  border: 1px solid GoldenRod;
+  position: absolute;
+  top: 400px;
+}
