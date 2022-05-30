@@ -113,7 +113,7 @@ function newXY(x, y, n){
   }
   return y;
 }
-function makeKey(c, x, y, w=40, h=40){
+function makeKey(c, x, y, w=35, h=35){
   keyID = "key" + c;
   md = " onmousedown=\"clickLetter('" + c + "')\"";
   if (c == " "){
@@ -143,7 +143,7 @@ function makeKey(c, x, y, w=40, h=40){
   document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
   document.getElementById(keyID).style["width"] = w.toString() + "px";
   document.getElementById(keyID).style["height"] = h.toString() + "px";
-
+  document.getElementById(keyID).style["border-radius"] = 3 + "px";
   document.getElementById(keyID).style["position"] = "absolute";
   document.getElementById(keyID).style["left"] = x.toString() + "px";
   document.getElementById(keyID).style["top"] = y.toString() + "px";
@@ -152,7 +152,7 @@ function makeKeys(){
 
   x = 0;
   y = 20;
-  board = ["QWERTYUIOP?", "ASDFGHJKL!", "ZXCVBNM,."];
+  board = ["QWERTYUIOP?", "ASDFGHJKL!,", "ZXCVBNM."];
 
   for (var i = 0; i < board.length; i++){
     for (var j = 0; j < board[i].length; j++){
@@ -160,23 +160,23 @@ function makeKeys(){
       makeKey(c, x, y);
       x += 40;
     }
-
+    x = 0;
     y += 40;
-    x = 20 * i + 20;
   }
+  x = 0;
   c = " ";
-  makeKey(c, x, y, 280);
-  c = "1";
-  x += 280;
+  makeKey(c, x, y, 355);
+  c = "2";//back
+  x += 360;
+  makeKey(c, x, y, 80);
+  c = "1";//quote
+  x = 320;
+  y = 100;
   makeKey(c, x, y);
-  c = "2";
-  x = 500;
-  y = 50;
-  makeKey(c, x, y);
-  c = "3";
-  x = 540;
-  y = 50;
-  makeKey(c, x, y, 100);
+  c = "3";//enter
+  x = 360;
+  y = 100;
+  makeKey(c, x, y, 80);
   }
 
 function prettyPrint(l, g, y0){
