@@ -113,9 +113,43 @@ function newXY(x, y, n){
   }
   return y;
 }
+function makeKey(c, x, y, w=40, h=40){
+  keyID = "key" + c;
+  md = " onmousedown=\"clickLetter('" + c + "')\"";
+  if (c == " "){
+    md = " onmousedown=\"clickSpace()\"";
+  }
+  mov = " onmouseover=\"darkLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"";
+  if (c == "1"){
+    c = "'";
+  }
+  else if (c == "2"){
+    c = "<";
+    md = " onmousedown=\"backPressed()\"";
+  }
+  if (c == "3"){
+    c = "e";
+    md = " onmousedown=\"enterPressed()\"";
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + "Enter" +  "</div>";
+    document.getElementById(keyID).style["background-color"] = "Green";
+  }
+  else{
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + c +  "</div>";
+    document.getElementById(keyID).style["background-color"] = "DimGray";
+  }
+  document.getElementById(keyID).style["color"] = "white";
+  document.getElementById(keyID).style["text-align"] = "center";
+  document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
+  document.getElementById(keyID).style["width"] = w.toString() + "px";
+  document.getElementById(keyID).style["height"] = h.toString() + "px";
+
+  document.getElementById(keyID).style["position"] = "absolute";
+  document.getElementById(keyID).style["left"] = x.toString() + "px";
+  document.getElementById(keyID).style["top"] = y.toString() + "px";
+}
 function makeKeys(){
 
-  ret = "";
   x = 0;
   y = 20;
   board = ["QWERTYUIOP?", "ASDFGHJKL!", "ZXCVBNM,."];
@@ -123,7 +157,7 @@ function makeKeys(){
   for (var i = 0; i < board.length; i++){
     for (var j = 0; j < board[i].length; j++){
       c = board[i].slice(j, j+1);
-      ret += "<div id=\"key" + c + "\" onmousedown=\"clickLetter('" + board[i].slice(j, j+1) + "')\" onmouseout=\"lightLetter('" + board[i].slice(j, j+1) + "')\" onmouseover=\"darkLetter('" + board[i].slice(j, j+1) + "')\" style=\"color: white;\ntext-align: center;\nfont-family: monospace,sans-serif;width: 40px;\nheight: 40px;\nbackground-color: DimGray;\nposition: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px\">" + c + "</div>";
+      makeKey(c, x, y);
       x += 40;
     }
 
@@ -131,13 +165,19 @@ function makeKeys(){
     x = 20 * i + 20;
   }
   c = " ";
-  ret += "<div id=\"key" + c + "\" onmousedown=\"clickSpace('" + c + "')\" onmouseout=\"lightLetter('" + c + "')\" onmouseover=\"darkLetter('" + c + "')\" style=\"color: white;\ntext-align: center;\nfont-family: monospace,sans-serif;width: 280px;\nheight: 40px;\nbackground-color: DimGray;\nposition: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px\">" + c + "</div>";
+  makeKey(c, x, y, 280);
   c = "1";
   x += 280;
-  ret += "<div id=\"key" + c + "\" onmousedown=\"clickLetter('1')\" onmouseout=\"lightLetter('" + c + "')\" onmouseover=\"darkLetter('" + c + "')\" style=\"color: white;\ntext-align: center;\nfont-family: monospace,sans-serif;width: 40px;\nheight: 40px;\nbackground-color: DimGray;\nposition: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px\">" + "'" + "</div>";
-  //ret += "<div id=\"key" + " " + "\" onmousedown=\"clickLetter('" + "board[i].slice(j, j+1)" + "')\" onmouseout=\"lightLetter('" + board[i].slice(j, j+1) + "')\" onmouseover=\"darkLetter('" + board[i].slice(j, j+1) + "')\" style=\"color: white;\ntext-align: center;\nfont-family: monospace,sans-serif;width: 40px;\nheight: 40px;\nbackground-color: DimGray;\nposition: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px\">" + c + "</div>";
-  document.getElementById("keyboard").innerHTML += ret;
-}
+  makeKey(c, x, y);
+  c = "2";
+  x = 500;
+  y = 50;
+  makeKey(c, x, y);
+  c = "3";
+  x = 540;
+  y = 50;
+  makeKey(c, x, y, 100);
+  }
 
 function prettyPrint(l, g, y0){
   ret = "";
@@ -262,7 +302,13 @@ function clickLetter(c){
   Cursor += 20;
 }
 }
-function clickSpace(c){
+function backPressed(){
+if(Guess.length > 0){
+  document.getElementById('inputsquares').innerHTML = "";
+  Guess = Guess.slice(0, Guess.length - 1);
+  reset(Guess);
+}}
+function clickSpace(){
   if (Guess.length > 0 && Guess.slice(-1) != " "){
   Guess += " ";
   Cursor += 20;}
@@ -274,11 +320,7 @@ function enter(event) {
     enterPressed();
   }
   else if (x == "Backspace"){
-    if(Guess.length > 0){
-      document.getElementById('inputsquares').innerHTML = "";
-      Guess = Guess.slice(0, Guess.length - 1);
-      reset(Guess);
-    }
+    backPressed();
   }
   else if (x == " ") {
     if (Guess.length > 0 && Guess.slice(-1) != " "){
