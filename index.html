@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v2</title>
+  <title>Sentencle v3</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)">
@@ -32,7 +32,7 @@ var Guess = "";
 var Prev = "";
 var Prevs = []
 var Level = 50;
-var Cursor = 0;
+var Cursor = 20;
 
 function takeGuess() {
   var x = document.getElementById("frm1");
@@ -101,7 +101,7 @@ function pretty_print_old(l, g){
   }
 
 function newXY(x, y, n){
-  if (x < 940){
+  if (x < 440){
     x += 20;
   }
   else{
@@ -150,7 +150,7 @@ function makeKey(c, x, y, w=35, h=35){
 }
 function makeKeys(){
 
-  x = 0;
+  x = 20;
   y = 20;
   board = ["QWERTYUIOP?", "ASDFGHJKL!,", "ZXCVBNM."];
 
@@ -160,23 +160,23 @@ function makeKeys(){
       makeKey(c, x, y);
       x += 40;
     }
-    x = 0;
+    x = 20;
     y += 40;
   }
-  x = 0;
+  x = 20;
   c = " ";
   makeKey(c, x, y, 355);
   c = "2";//back
   x += 360;
-  makeKey(c, x, y, 80);
+  makeKey(c, x, y, 75);
   c = "1";//quote
-  x = 320;
+  x = 340;
   y = 100;
   makeKey(c, x, y);
   c = "3";//enter
-  x = 360;
+  x = 380;
   y = 100;
-  makeKey(c, x, y, 80);
+  makeKey(c, x, y, 75);
   }
 
 function prettyPrint(l, g, y0){
@@ -191,25 +191,26 @@ function prettyPrint(l, g, y0){
   ending = l[l.length - 1].slice(-1) == g.slice(-1);
   if (! beginning){
     ret += spaceXY(x, y);
-    x = newXY(x, y, 0);
     y = newXY(x, y, 1);
+    x = newXY(x, y, 0);
   }
   for (var i = 0; i < l.length; i++){
     for (var j = 0; j < (l[i]).length; j++){
       ret += charXY(x, y, l[i].slice(j, j+1));
-      x = newXY(x, y, 0);
       y = newXY(x, y, 1);
+      x = newXY(x, y, 0);
+
     }
     if (i != l.length - 1){
       ret += spaceXY(x, y);
-      x = newXY(x, y, 0);
       y = newXY(x, y, 1);
+      x = newXY(x, y, 0);
     }
   }
   if (! ending){
     ret += spaceXY(x, y);
-    x = newXY(x, y, 0);
     y = newXY(x, y, 1);
+    x = newXY(x, y, 0);
   }
   return ret;
 }
@@ -243,10 +244,10 @@ function myFunction() {
   text = prettyPrint(["GUESS: " + Guess], "GUESS: " + Guess, 10);
   text += prettyPrint(current, goalSentence, 90) + "<br/>";
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", 40);
+    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", 160);
   }
   else{
-    text += "YOU WON! </br>";
+    text += prettyPrint(["YOU WON"], "YOU WON", 160);
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
   //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
@@ -272,19 +273,21 @@ window.addEventListener('keydown', (e) => {
 function enterPressed(){
   myFunction();
   document.getElementById('inputsquares').innerHTML = "";
-  Cursor = 0;
+  Cursor = 20;
 }
 function reset(s){
-  Cursor = 0;
+  Cursor = 20;
+  y = 50;
   for (i = 0; i < s.length; i++){
-    x = s[i];
-    if (x == " ") {
+    c = s[i];
+    if (c == " ") {
       Cursor += 20;
     }
     else{
       //document.getElementById('userinput').value += x;
-      document.getElementById('inputsquares').innerHTML += charXY(Cursor, 50, x);
-      Cursor += 20;
+      document.getElementById('inputsquares').innerHTML += charXY(Cursor, y, c);
+      y = newXY(Cursor, y, 1);
+      Cursor = newXY(Cursor, y, 0);
     }
   }
 }
@@ -298,8 +301,8 @@ function clickLetter(c){
   else{
   Guess += c.toUpperCase();
   //document.getElementById('userinput').value += x;
-  document.getElementById('inputsquares').innerHTML += charXY(Cursor, 50, c.toUpperCase());
-  Cursor += 20;
+  document.getElementById('inputsquares').innerHTML = "";
+  reset(Guess);
 }
 }
 function backPressed(){
@@ -323,16 +326,13 @@ function enter(event) {
     backPressed();
   }
   else if (x == " ") {
-    if (Guess.length > 0 && Guess.slice(-1) != " "){
+    if (Guess.length > 0 && Guess.length < 98 && Guess.slice(-1) != " "){
     Guess += x;
     Cursor += 20;}
   }
-  else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!'".includes(x)){
-    Guess += x.toUpperCase();
+  else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!'".includes(x) && Guess.length < 98){
     darkLetter(x.toUpperCase());
-    //document.getElementById('userinput').value += x;
-    document.getElementById('inputsquares').innerHTML += charXY(Cursor, 50, x.toUpperCase());
-    Cursor += 20;
+    clickLetter(x);
   }
 }
 function releaseKey(event) {
