@@ -120,7 +120,7 @@ function makeKey(c, x, y, w=40, h=40){
     md = " onmousedown=\"clickSpace()\"";
   }
   mov = " onmouseover=\"darkLetter('" + c + "')\"";
-  mo = " onmouseout=\"lightLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " touchend=\"lightLetter('" + c + "')\"";
   if (c == "1"){
     c = "'";
   }
