@@ -2,10 +2,10 @@
 <html>
 
 <head>
-  <title>Sentencle v4</title>
+  <title>Sentencle v5</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)">
+<body onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)" onresize="testFunc()">
 
 <div id="inputsquares">
 </div>
@@ -88,10 +88,10 @@ function update(guess, goal) {
   }
 
   function charXY(x, y, c){
-    return "<div id=\"character\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString()+ "px;\nheight: " + Keysize.toString() + "\">" + c + "</div>";
+    return "<div id=\"character\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString()+ "px;\nheight: " + Keysize.toString() + "px;\nfont-size: " + parseInt(Keysize * 0.8).toString() + "px;\">" + c + "</div>";
   }
   function spaceXY(x, y){
-    return "<div id=\"spacer\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString()+ "px;\nheight: " + Keysize.toString() + "\">*</div>";
+    return "<div id=\"spacer\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString() + "px;\nheight: " + Keysize.toString() + "px;\nfont-size: " + parseInt(Keysize * 0.8).toString() + "px;\">*</div>";
   }
 
 function newXY(x, y, n){
@@ -115,6 +115,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   }
   mov = " onmouseover=\"darkLetter('" + c + "')\"" + " touchstart=\"lightLetter('" + c + "')\"";;
   mo = " onmouseout=\"lightLetter('" + c + "')\"" + " touchend=\"lightLetter('" + c + "')\"";
+
   if (c == "1"){
     c = "'";
   }
@@ -125,7 +126,6 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   if (c == "3"){
     c = "e";
     md = " onmousedown=\"enterPressed()\"";
-    document.getElementById("keyboard").style["top"] = (window.innerHeight - 200).toString() + "px";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "Green";
   }
@@ -142,6 +142,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   document.getElementById(keyID).style["position"] = "absolute";
   document.getElementById(keyID).style["left"] = x.toString() + "px";
   document.getElementById(keyID).style["top"] = y.toString() + "px";
+  document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.8)).toString() + "px";
 }
 function makeKeys(){
   Width = window.innerWidth;
@@ -160,7 +161,7 @@ function makeKeys(){
   kbh = Height/4;
   document.getElementById("keyboard").style["height"] = (kbh).toString() + "px";
   document.getElementById("keyboard").style["width"] = (Width).toString() + "px";
-  document.getElementById("keyboard").style["bottom"] = (Height).toString() + "px";
+  document.getElementById("keyboard").style["bottom"] = "0px";//(Height).toString() + "px";
   Keysize = Width / 15;
   spaceSize = Keysize + (Keysize / 5);
   x = parseInt(Keysize * 0.9);
@@ -237,11 +238,11 @@ function testPrint(l){
   return ret;
 }
 function printAll(l, goalSentence){
-  y = 50;
+  y = Keysize;
   ret = "";
   for (i = l.length - 1; i >= 0; i--){
     ret += prettyPrint(l[i], goalSentence, y);
-    y+= 90;
+    y += Keysize * 2;
   }
   return ret;
 }
@@ -270,7 +271,7 @@ function myFunction() {
   //Prev += pretty_print(current, goalSentence, Level);
   if (current.length > 0){
     Prevs.push(current);
-    Level += 5 * Keysize;
+    Level += 6 * Keysize;
   }
   document.getElementById("game").innerHTML = text;
   //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
@@ -307,8 +308,8 @@ function reset(s){
 function clickLetter(c){
   if (c == "1"){
     Guess += "'";
-    //document.getElementById('userinput').value += x;
-    document.getElementById('inputsquares').innerHTML += charXY(Cursor, 50, "'");
+    document.getElementById('inputsquares').innerHTML = "";
+    reset(Guess);
 
     Cursor += 20;
   }
@@ -332,7 +333,11 @@ function clickSpace(){
 }
 function enter(event) {
   var x = event.key;
-  // If the pressed keyboard button is "a" or "A" (using caps lock or shift), alert some text.
+  if (x != "1"){
+
+  if (x == "'"){
+    x = "1";
+  }
   if (x == "Enter") {
     enterPressed();
   }
@@ -344,18 +349,43 @@ function enter(event) {
     Guess += x;
     Cursor += 20;}
   }
-  else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!'".includes(x) && Guess.length < (13 * 5 - 7)){
+  else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!1".includes(x) && Guess.length < (13 * 5 - 7)){
     darkLetter(x.toUpperCase());
     clickLetter(x);
-  }
+  }}
 }
 function releaseKey(event) {
   var x = event.key;
+  if (x == "'"){
+    x = "1";
+  }
   // If the pressed keyboard button is "a" or "A" (using caps lock or shift), alert some text.
-  if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!' ".includes(x)){
+  if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!1 ".includes(x)){
     lightLetter(x.toUpperCase());
     //document.getElementById('userinput').value += x;
   }
+}
+function testFunc(){
+  document.getElementById("keyboard").innerHTML = "";
+  makeKeys();
+  text = prettyPrint(["GUESS: " + Guess], "GUESS: " + Guess, Keysize);
+  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23)) + "<br/>";
+  if (incomplete(current, goalSentence)){
+    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.43));
+  }
+  else{
+    text += prettyPrint(["YOU WON"], "YOU WON", 200);
+  }
+  //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
+  //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
+  if (Prevs.length > 0){
+    Level = parseInt(5 * Keysize * Prevs.length + Height * 0.25);
+    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(Prevs, goalSentence) + "</div>";
+  }
+  document.getElementById("game").innerHTML = text;
+  //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
+
+  Guess = "";
 }
 </script>
 
