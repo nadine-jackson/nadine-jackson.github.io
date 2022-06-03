@@ -1,30 +1,31 @@
 *{
   padding: 0;
-  margin: 0;
+  margin: auto;
 }
 #game{
   background-color: GoldenRod;
+  margin: auto;
   position: absolute;
 }
 #character{
   background-color: teal;
-  left: 20px;
   color: white;
   text-align: center;
   font-family: monospace,sans-serif;
 }
 #spacer{
   background-color: gray;
-  left: 20px;
   color: white;
   text-align: center;
   font-family: monospace,sans-serif;
 }
 #infobox{
+  margin: auto;
   background-color: AntiqueWhite;
   position: absolute;
 }
 #keyboard{
+  margin: auto;
   background-color: Khaki;
   position: fixed;
 }
