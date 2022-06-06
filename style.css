@@ -3,29 +3,43 @@
   margin: auto;
 }
 #game{
-  background-color: GoldenRod;
+  background-color: #A3F7B5;
   margin: auto;
   position: absolute;
 }
 #character{
-  background-color: teal;
-  color: white;
+  background-color: #035E7B;
+  color: #E5F9E0;
   text-align: center;
   font-family: monospace,sans-serif;
 }
 #spacer{
-  background-color: gray;
-  color: white;
+  background-color: #2F9C95;
+  color: #E5F9E0;
   text-align: center;
   font-family: monospace,sans-serif;
 }
 #infobox{
   margin: auto;
-  background-color: AntiqueWhite;
+  background-color: #40C9A2;
+  position: absolute;
+}
+#inputsquares{
+  margin: auto;
+  background-color: white;
   position: absolute;
 }
 #keyboard{
   margin: auto;
-  background-color: Khaki;
+  background-color: #2F9C95;
   position: fixed;
+}
+#banner{
+  margin: auto;
+  background-color: #40C9A2;
+  position: fixed;
+  top : 0px;
+}
+#body{
+  background-color: DarkSlateGray;
 }

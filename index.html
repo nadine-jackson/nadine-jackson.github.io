@@ -5,15 +5,12 @@
   <title>Sentencle v5</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)" onresize="redraw()">
+<body id="body" onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)" onresize="redraw()">
+
+<div id="banner"></div>
 
 <div id="inputsquares">
 </div>
-
-
-<p>Guess the words (and punctuation) in the sentence.</p>
-
-
 
 <div id="game">
 </div>
@@ -34,6 +31,11 @@ var Cursor = 20;
 var Keysize = 20;
 var Width = 0;
 var Height = 0;
+var InputTop = 0;
+var GameTop = 0;
+var OutputTop = 0;
+var Bound = 0;
+var OldGuess = "";
 
 function takeGuess() {
   var x = document.getElementById("frm1");
@@ -45,14 +47,16 @@ function takeGuess() {
   return text;
 }
 function darkLetter(c){
-  document.getElementById("key" + c).style["background-color"] = "DarkSlateGray"
+  document.getElementById("key" + c).style["background-color"] = "DarkSlateGray";
+  document.getElementById("key" + c).style["color"] = "#E5F9E0";
 }
 function lightLetter(c){
   if (c == "3"){
-  document.getElementById("key" + c).style["background-color"] = "Green";
+  document.getElementById("key" + c).style["background-color"] = "#A3F7B5";
+  document.getElementById("key" + c).style["color"] = "DarkSlateGray";
 }
 else{
-  document.getElementById("key" + c).style["background-color"] = "DimGray"
+  document.getElementById("key" + c).style["background-color"] = "#035E7B";
 }
 }
 function update(guess, goal) {
@@ -93,8 +97,8 @@ function update(guess, goal) {
     return "<div id=\"spacer\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString() + "px;\nheight: " + Keysize.toString() + "px;\nfont-size: " + parseInt(Keysize * 0.8).toString() + "px;\">*</div>";
   }
 
-function newXY(x, y, n, lbound = Keysize / 2, rbound = window.innerWidth - Keysize / 2){
-  if (x < rbound - Keysize * 2){
+function newXY(x, y, n, lbound = Bound, rbound = Width - Bound){
+  if (x <= rbound - Keysize * 2){
     x += Keysize;
   }
   else{
@@ -126,22 +130,26 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
     c = "e";
     md = " onclick=\"enterPressed()\"";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + "Enter" +  "</div>";
-    document.getElementById(keyID).style["background-color"] = "Green";
+    document.getElementById(keyID).style["background-color"] = "#A3F7B5";
+    document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.5)).toString() + "px";
+    document.getElementById(keyID).style["color"] = "DarkSlateGray";
   }
   else{
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + c +  "</div>";
-    document.getElementById(keyID).style["background-color"] = "DimGray";
+    document.getElementById(keyID).style["background-color"] = "#035E7B";
+    document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.8)).toString() + "px";
+    document.getElementById(keyID).style["color"] = "#E5F9E0";
   }
-  document.getElementById(keyID).style["color"] = "white";
+
   document.getElementById(keyID).style["text-align"] = "center";
   document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
   document.getElementById(keyID).style["width"] = w.toString() + "px";
   document.getElementById(keyID).style["height"] = h.toString() + "px";
-  document.getElementById(keyID).style["border-radius"] = 3 + "px";
+  document.getElementById(keyID).style["border-radius"] = h/10 + "px";
   document.getElementById(keyID).style["position"] = "absolute";
   document.getElementById(keyID).style["left"] = x.toString() + "px";
   document.getElementById(keyID).style["top"] = y.toString() + "px";
-  document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.8)).toString() + "px";
+
 }
 function makeKeys(){
   Width = window.innerWidth;
@@ -154,10 +162,23 @@ function makeKeys(){
     Width = parseInt(Height / 1.7787);
   }
 
+  InputTop = Height / 10;
+  document.getElementById("inputsquares").style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
+  document.getElementById("inputsquares").style["width"] = (Width).toString() + "px";
+  document.getElementById("inputsquares").style["top"] = (InputTop).toString() + "px";
+  document.getElementById("inputsquares").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+
+  OutputTop = Height * 3 / 4;
+  GameTop = Height / 4;
+
   document.getElementById("game").style["height"] = (Height/2).toString() + "px";
   document.getElementById("game").style["width"] = (Width).toString() + "px";
-  document.getElementById("game").style["top"] = (Height / 4).toString() + "px";
+  document.getElementById("game").style["top"] = (GameTop).toString() + "px";
   document.getElementById("game").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+
+  document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
+  document.getElementById("banner").style["width"] = (Width).toString() + "px";
+  document.getElementById("banner").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
   board = ["QWERTYUIOP?", "ASDFGHJKL!,", "ZXCVBNM.1"];
   kbh = Height/4;
   document.getElementById("keyboard").style["height"] = (kbh).toString() + "px";
@@ -165,6 +186,7 @@ function makeKeys(){
   document.getElementById("keyboard").style["bottom"] = "0px";//(Height).toString() + "px";
   document.getElementById("keyboard").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
   Keysize = Width / 15;
+  Bound = (Width - 13 * Keysize - 1) / 2;
   keyWidth = parseInt(Width / 11);
   keyHeight = parseInt(kbh / 5);
   keyWidth = parseInt(keyWidth * parseFloat(10.0 / 11));
@@ -198,7 +220,7 @@ function makeKeys(){
   makeKey(c, x, y, keyWidth * 2 + spaceSize, keyHeight);
   }
 
-function prettyPrint(l, g, y0, lbound = Keysize / 2, rbound = window.innerWidth / 2 - Keysize * 3 / 2){
+function prettyPrint(l, g, y0, lbound = Bound, rbound = Width - Bound){
   ret = "";
   x = lbound;
   y = y0;
@@ -258,12 +280,13 @@ function myFunction() {
 
   goalSentence = "You are the Universe itself.".toUpperCase();
   guess = Guess;
+  OldGuess = Guess;
   current = update(guess, goalSentence);
   //text = "Guess: " + guess;
-  text = prettyPrint(["GUESS: " + Guess], "GUESS: " + Guess, Keysize, Keysize / 2, Width - Keysize / 2);
-  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23)) + "<br/>";
+  text = prettyPrint(["GUESS: " + OldGuess], "GUESS: " + OldGuess, Bound);
+  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.43));
+    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.23) + Keysize + Bound);
   }
   else{
     text += prettyPrint(["YOU WON!"], "YOU WON!", parseInt(Height * 0.43), Keysize / 2, Width - Keysize / 2);
@@ -291,23 +314,35 @@ window.addEventListener('keydown', (e) => {
 });
 function enterPressed(){
   myFunction();
-  document.getElementById('inputsquares').innerHTML = "";
-  Cursor = Keysize / 2;
+  Guess = "";
+  reset("");
 }
 function reset(s){
-  Cursor = Keysize / 2;
-  y = Keysize * 0.9;
+  Cursor = Bound;
+  y = Bound;
+  document.getElementById('inputsquares').style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
+  document.getElementById('inputsquares').innerHTML = "";
+  GameTop = Height / 4;
+  document.getElementById('game').style["top"] = (GameTop).toString() + "px";
+  document.getElementById('game').style["height"] = (Height / 2).toString() + "px";
   for (i = 0; i < s.length; i++){
     c = s[i];
     if (c == " ") {
-      Cursor += Keysize;
+      y = newXY(Cursor, y, 1, Bound, Width - Bound);
+      Cursor = newXY(Cursor, y, 0, Bound, Width - Bound);
     }
     else{
       //document.getElementById('userinput').value += x;
       document.getElementById('inputsquares').innerHTML += charXY(Cursor, y, c);
 
-      y = newXY(Cursor, y, 1, Keysize / 2, window.innerWidth - Keysize / 2);
-      Cursor = newXY(Cursor, y, 0, Keysize / 2, window.innerWidth - Keysize / 2);
+      y = newXY(Cursor, y, 1, Bound, Width - Bound);
+      if (y > GameTop - InputTop - Bound - Keysize){
+        document.getElementById('inputsquares').style["height"] = (GameTop - InputTop + Bound * 2 + Keysize).toString() + "px";
+        GameTop += Keysize;
+        document.getElementById('game').style["top"] = (GameTop).toString() + "px";
+        document.getElementById('game').style["height"] = (OutputTop - GameTop).toString() + "px";
+      }
+      Cursor = newXY(Cursor, y, 0, Bound, Width - Bound);
     }
   }
 }
@@ -374,12 +409,12 @@ function releaseKey(event) {
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
   makeKeys();
+  reset(Guess);
   document.getElementById("game").innerHTML = "";
-  text = prettyPrint(["GUESS: " + Guess], "GUESS: " + Guess, Keysize, Keysize / 2, Width - (Keysize/2));
-  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23), Keysize / 2, Width - Keysize / 2);
-
+  text = prettyPrint(["GUESS: " + OldGuess], "GUESS: " + OldGuess, Keysize);
+  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.43));
+    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.23) + Keysize + Bound);
   }
   else{
     text += prettyPrint(["YOU WON!"], "Y!", parseInt(Height * 0.43));
@@ -393,7 +428,7 @@ function redraw(){
 
   //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
 
-  Guess = "";
+  //Guess = "";
 }
 </script>
 
