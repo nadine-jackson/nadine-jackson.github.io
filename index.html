@@ -20,8 +20,7 @@
 
 </div>
 
-
-
+<script src="./sentences.txt"></script>
 <script>
 var Guess = "";
 var Prev = "";
@@ -36,6 +35,10 @@ var GameTop = 0;
 var OutputTop = 0;
 var Bound = 0;
 var OldGuess = "";
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
 
 function takeGuess() {
   var x = document.getElementById("frm1");
@@ -179,6 +182,7 @@ function makeKeys(){
   document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
   document.getElementById("banner").style["width"] = (Width).toString() + "px";
   document.getElementById("banner").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+  //document.getElementById("banner").innerHTML = dd + "/" + mm + "/" + yyyy;
   board = ["QWERTYUIOP?", "ASDFGHJKL!,", "ZXCVBNM.1"];
   kbh = Height/4;
   document.getElementById("keyboard").style["height"] = (kbh).toString() + "px";
@@ -269,7 +273,7 @@ function printAll(l, goalSentence){
   y = Keysize;
   ret = "";
   for (i = l.length - 1; i >= 0; i--){
-    ret += prettyPrint(l[i], goalSentence, y, Keysize / 2, Width - Keysize / 2);
+    ret += prettyPrint(l[i], goalSentence, y);
     y += Keysize * 2;
   }
   return ret;
@@ -278,7 +282,7 @@ function incomplete(l, g){
     return ((! (l.length == 1)) || (! (l[0] === g)));}
 function myFunction() {
 
-  goalSentence = "You are the Universe itself.".toUpperCase();
+  goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
   guess = Guess;
   OldGuess = Guess;
   current = update(guess, goalSentence);
@@ -289,7 +293,7 @@ function myFunction() {
     text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.23) + Keysize + Bound);
   }
   else{
-    text += prettyPrint(["YOU WON!"], "YOU WON!", parseInt(Height * 0.43), Keysize / 2, Width - Keysize / 2);
+    text += prettyPrint(["YOU WON!"], "YOU WON!", parseInt(Height * 0.43));
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
   //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
@@ -425,10 +429,6 @@ function redraw(){
     document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(Prevs, goalSentence) + "</div>";
   }
 
-
-  //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
-
-  //Guess = "";
 }
 </script>
 
