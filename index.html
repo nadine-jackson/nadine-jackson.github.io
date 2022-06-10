@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v7</title>
+  <title>Sentencle v8</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -172,8 +172,8 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   if (c == " "){
     md = " onclick=\"clickSpace()\"";
   }
-  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " ontouchstart=\"clickLetter('" + c + "')\"";
-  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " ontouchend=\"lightLetter('" + c + "')\"";
+  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " ontouchstart=\"mobileClickLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " ontouchend=\"mobileLightLetter('" + c + "')\"";
 
   if (c == "1"){
     c = "'";
@@ -353,6 +353,11 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
   }
 });
+window.addEventListener('touchstart', (e) => {
+  if (e.keyCode === 32 && e.target === document.body) {
+    e.stopPropagation();
+  }
+});
 function enterPressed(){
   if (Guess.length > 0){
   playSound(key2);
@@ -493,6 +498,9 @@ function releaseKey(event) {
     lightLetter(x.toUpperCase());
     //document.getElementById('userinput').value += x;
   }
+}
+function mobileClickLetter(c){
+  clickLetter(c);
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
