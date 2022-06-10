@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v11</title>
+  <title>Sentencle v12</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -206,7 +206,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   document.getElementById(keyID).style["position"] = "absolute";
   document.getElementById(keyID).style["left"] = x.toString() + "px";
   document.getElementById(keyID).style["top"] = y.toString() + "px";
-
+  document.getElementById(keyID).style["touch-action"] = "manipulation";
 }
 function makeKeys(){
 
