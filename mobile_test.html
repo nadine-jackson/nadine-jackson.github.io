@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sentencle Mobile</title>
+</head>
+<body id="body" onLoad="makeAll()">
+
+<div id="top button" touchstart="light()" touchend="normal()"></div>
+<div id="bottom button" touchstart="dark()" touchend="normal()"></div>
+
+<script>
+  function makeTop(){
+    document.getElementById("top button").style["background-color"] = "Gold";
+    document.getElementById("top button").style["margin"] = "auto";
+    document.getElementById("top button").style["position"] = "absolute";
+    document.getElementById("top button").style["top"] = "0%";
+    document.getElementById("top button").style["height"] = "50%";
+    document.getElementById("top button").style["width"] = "100%";
+    /*  background-color: #A3F7B5;
+      margin: auto;
+      position: absolute;*/
+  }
+  function makeBottom(){
+    document.getElementById("bottom button").style["background-color"] = "Gray";
+    document.getElementById("bottom button").style["margin"] = "auto";
+    document.getElementById("bottom button").style["position"] = "absolute";
+    document.getElementById("bottom button").style["top"] = "50%";
+    document.getElementById("bottom button").style["height"] = "50%";
+    document.getElementById("bottom button").style["width"] = "100%";
+  }
+function makeAll(){
+  makeTop();
+  makeBottom();
+}
+function dark(){
+  document.getElementById("top button").style["background-color"] = "GoldenRod";
+  document.getElementById("bottom button").style["background-color"] = "DarkGray";
+}
+function normal(){
+  document.getElementById("top button").style["background-color"] = "Gold";
+  document.getElementById("bottom button").style["background-color"] = "Gray";
+}
+function light(){
+  document.getElementById("top button").style["background-color"] = "Yellow";
+  document.getElementById("bottom button").style["background-color"] = "LightGray";
+}
+</script>
+
+</body>
+</html>
