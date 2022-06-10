@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v12</title>
+  <title>Sentencle v13</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -503,7 +503,7 @@ function mobileLightLetter(c){
   lightLetter(c);
 }
 function mobileClickLetter(c, x){
-  e.preventDefault();
+  x.preventDefault();
   clickLetter(c);
 }
 function redraw(){
