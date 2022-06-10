@@ -172,8 +172,8 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   if (c == " "){
     md = " onclick=\"clickSpace()\"";
   }
-  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " touchstart=\"lightLetter('" + c + "')\"";
-  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " touchend=\"lightLetter('" + c + "')\"";
+  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " ontouchstart=\"clickLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " ontouchend=\"lightLetter('" + c + "')\"";
 
   if (c == "1"){
     c = "'";
