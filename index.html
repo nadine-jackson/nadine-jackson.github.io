@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v8</title>
+  <title>Sentencle v9</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -43,6 +43,7 @@ var key1 = new Audio('./KeyPress1.mp3');
 var key2 = new Audio('./KeyPress2.mp3');
 var doink = new Audio('./doink.mp3');
 var SoundOn = true;
+var LockedLetters = Set();
 function takeGuess() {
   var x = document.getElementById("frm1");
   var text = "";
@@ -353,11 +354,7 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
   }
 });
-window.addEventListener('touchstart', (e) => {
-  if (e.keyCode === 32 && e.target === document.body) {
-    e.stopPropagation();
-  }
-});
+
 function enterPressed(){
   if (Guess.length > 0){
   playSound(key2);
@@ -422,6 +419,7 @@ function reset(s){
   }
 }
 function clickLetter(c){
+  if (! LockedLetters.has(c)){
   playSound(key1);
   if (c == "1"){
     Guess += "'";
@@ -435,6 +433,7 @@ function clickLetter(c){
   //document.getElementById('userinput').value += x;
   document.getElementById('inputsquares').innerHTML = "";
   reset(Guess);
+}
 }
 }
 function backPressed(){
@@ -499,8 +498,19 @@ function releaseKey(event) {
     //document.getElementById('userinput').value += x;
   }
 }
+function lockLetter(c){
+  LockedLetters.add(c);
+}
+function unlockLetter(c){
+  LockedLetters.delete(c);
+}
+function mobileLightLetter(c){
+  lightLetter(c);
+  unlockLetter(c);
+}
 function mobileClickLetter(c){
   clickLetter(c);
+  lockLetter(c);
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
