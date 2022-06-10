@@ -5,7 +5,7 @@
   <title>Sentencle v6</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body id="body" onkeydown="enter(event)" onLoad="makeKeys()" onkeyup="releaseKey(event)" onresize="redraw()">
+<body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
 
 <div id="banner"></div>
 
@@ -39,7 +39,10 @@ var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
-
+var key1 = new Audio('./KeyPress1.mp3');
+var key2 = new Audio('./KeyPress2.mp3');
+var doink = new Audio('./doink.mp3');
+var SoundOn = true;
 function takeGuess() {
   var x = document.getElementById("frm1");
   var text = "";
@@ -66,6 +69,9 @@ function update(guess, goal) {
   guess = guess.toUpperCase();
   streak = false;
   l = [];
+  if (guess.slice(0, 1) != goal.slice(0, 1)){
+    l.push("");
+  }
   while ((guess.length > 0) && goal.includes(guess.charAt(0)))
   {
       while (goal.charAt(0) != guess.charAt(0)){
@@ -85,8 +91,18 @@ function update(guess, goal) {
       goal = goal.slice(1);
       //guess =;
     }
+    if (guess.slice(-1) != goal.slice(-1)){
+      l.push("");
+    }
   return l;
   //return ["HELLO WORLD."]
+}
+function playSound(sound){
+  if (SoundOn){
+    sound2 = sound.cloneNode();
+    sound2.play();
+    //sound.play();
+  }
 }
 
   function updateGuess(key){
@@ -113,13 +129,50 @@ function newXY(x, y, n, lbound = Bound, rbound = Width - Bound){
   }
   return y;
 }
+function mute(){
+  SoundOn = ! SoundOn;
+  makeBanner();
+}
+function makeSound(){
+  if (SoundOn){
+    document.getElementById("banner").innerHTML = "<img id=\"sound\" src=\"./sound_on.png\" onclick=\"mute()\" alt=\"Sound on Symbol\"></img>";
+  }
+  else{
+    document.getElementById("banner").innerHTML = "<img id=\"sound\" src=\"./sound_off.png\" onclick=\"mute()\" alt=\"Sound off Symbol\"></img>";
+  }
+  document.getElementById("sound").style["height"] = "50%";
+  document.getElementById("sound").style["position"] = "absolute";
+  document.getElementById("sound").style["top"] = "25%";
+  document.getElementById("sound").style["right"] = InputTop / 4 + "px";
+}
+function makeBanner(){
+  document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
+  document.getElementById("banner").style["width"] = (Width).toString() + "px";
+  document.getElementById("banner").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+  makeSound();
+  y0 = (InputTop - Keysize) / 2;
+  lbound = (Width - Keysize * "SENTENCLE".length) / 2;
+  document.getElementById("banner").innerHTML += prettyPrint("SENTENCLE", y0, lbound);
+}
+function makeInput(){
+  document.getElementById("inputsquares").style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
+  document.getElementById("inputsquares").style["width"] = (Width).toString() + "px";
+  document.getElementById("inputsquares").style["top"] = (InputTop).toString() + "px";
+  document.getElementById("inputsquares").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+}
+function makeGame(){
+  document.getElementById("game").style["height"] = (Height/2).toString() + "px";
+  document.getElementById("game").style["width"] = (Width).toString() + "px";
+  document.getElementById("game").style["top"] = (GameTop).toString() + "px";
+  document.getElementById("game").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+}
 function makeKey(c, x, y, w=Keysize, h=Keysize){
   keyID = "key" + c;
   md = " onclick=\"clickLetter('" + c + "')\"";
   if (c == " "){
     md = " onclick=\"clickSpace()\"";
   }
-  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " touchstart=\"lightLetter('" + c + "')\"";;
+  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " touchstart=\"lightLetter('" + c + "')\"";
   mo = " onmouseout=\"lightLetter('" + c + "')\"" + " touchend=\"lightLetter('" + c + "')\"";
 
   if (c == "1"){
@@ -155,33 +208,8 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
 
 }
 function makeKeys(){
-  Width = window.innerWidth;
-  Height = window.innerHeight;
-  Level = Height / 4;
-  if (Height / parseFloat(Width) > 1.7787){
-    Height = parseInt(1.7787 * Width);
-  }
-  else {
-    Width = parseInt(Height / 1.7787);
-  }
 
-  InputTop = Height / 10;
-  document.getElementById("inputsquares").style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
-  document.getElementById("inputsquares").style["width"] = (Width).toString() + "px";
-  document.getElementById("inputsquares").style["top"] = (InputTop).toString() + "px";
-  document.getElementById("inputsquares").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
 
-  OutputTop = Height * 3 / 4;
-  GameTop = Height / 4;
-
-  document.getElementById("game").style["height"] = (Height/2).toString() + "px";
-  document.getElementById("game").style["width"] = (Width).toString() + "px";
-  document.getElementById("game").style["top"] = (GameTop).toString() + "px";
-  document.getElementById("game").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
-
-  document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
-  document.getElementById("banner").style["width"] = (Width).toString() + "px";
-  document.getElementById("banner").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
   //document.getElementById("banner").innerHTML = dd + "/" + mm + "/" + yyyy;
   board = ["QWERTYUIOP?", "ASDFGHJKL!,", "ZXCVBNM.1"];
   kbh = Height/4;
@@ -189,7 +217,7 @@ function makeKeys(){
   document.getElementById("keyboard").style["width"] = (Width).toString() + "px";
   document.getElementById("keyboard").style["bottom"] = "0px";//(Height).toString() + "px";
   document.getElementById("keyboard").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
-  Keysize = Width / 15;
+
   Bound = (Width - 13 * Keysize - 1) / 2;
   keyWidth = parseInt(Width / 11);
   keyHeight = parseInt(kbh / 5);
@@ -223,8 +251,27 @@ function makeKeys(){
   y = (kbh - (4 * keyHeight + 3 * spaceSize)) / 2 + 2 * keyHeight + 2 * spaceSize;
   makeKey(c, x, y, keyWidth * 2 + spaceSize, keyHeight);
   }
+function makeAll(){
+  Width = window.innerWidth;
+  Height = window.innerHeight;
+  Level = Height / 4;
+  if (Height / parseFloat(Width) > 1.7787){
+    Height = parseInt(1.7787 * Width);
+  }
+  else {
+    Width = parseInt(Height / 1.7787);
+  }
+  InputTop = Height / 10;
+  OutputTop = Height * 3 / 4;
+  GameTop = Height / 4;
+  Keysize = Width / 15;
+  makeInput();
+  makeGame();
+  makeBanner();
+  makeKeys();
+}
 
-function prettyPrint(l, g, y0, lbound = Bound, rbound = Width - Bound){
+function prettyPrintVintage(l, g, y0, lbound = Bound, rbound = Width - Bound){
   ret = "";
   x = lbound;
   y = y0;
@@ -232,6 +279,7 @@ function prettyPrint(l, g, y0, lbound = Bound, rbound = Width - Bound){
     ret += spaceXY(x, y);
     return ret;
   }
+
   beginning = l[0].slice(0, 1) == g.slice(0, 1);
   ending = l[l.length - 1].slice(-1) == g.slice(-1);
   if (! beginning){
@@ -259,6 +307,24 @@ function prettyPrint(l, g, y0, lbound = Bound, rbound = Width - Bound){
   }
   return ret;
 }
+function prettyPrint(s, y0, lbound = Bound, rbound = Width - Bound){
+  ret = "";
+  x = lbound;
+  y = y0;
+  //s = l.join("*");
+  for (var i = 0; i < s.length; i++){
+    if (s.slice(i, i+1) == "*"){
+      ret += spaceXY(x, y, s.slice(i, i+1));
+    }
+    else {
+      ret += charXY(x, y, s.slice(i, i+1));
+    }
+      y = newXY(x, y, 1, lbound, rbound);
+      x = newXY(x, y, 0, lbound, rbound);
+
+  }
+  return ret;
+}
 function testPrint(l){
   ret = "";
   for (i = 0; i < l.length; i++){
@@ -273,27 +339,33 @@ function printAll(l, goalSentence){
   y = Keysize;
   ret = "";
   for (i = l.length - 1; i >= 0; i--){
-    ret += prettyPrint(l[i], goalSentence, y);
+    s = l[i].join("*");
+    ret += prettyPrint(s, y);
     y += Keysize * 2;
   }
   return ret;
 }
 function incomplete(l, g){
-    return ((! (l.length == 1)) || (! (l[0] === g)));}
-function myFunction() {
-
+    return ((! (l.length == 1)) || (! (l[0] === g)));
+  }
+window.addEventListener('keydown', (e) => {
+  if (e.keyCode === 32 && e.target === document.body) {
+    e.preventDefault();
+  }
+});
+function enterPressed(){
+  if (Guess.length > 0){
+  playSound(key2);
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
-  guess = Guess;
   OldGuess = Guess;
-  current = update(guess, goalSentence);
-  //text = "Guess: " + guess;
-  text = prettyPrint(["GUESS: " + OldGuess], "GUESS: " + OldGuess, Bound);
-  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23));
+  current = update(OldGuess, goalSentence);
+  text = prettyPrint("GUESS: " + OldGuess, Bound);
+  text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.23) + Keysize + Bound);
+    text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
   }
   else{
-    text += prettyPrint(["YOU WON!"], "YOU WON!", parseInt(Height * 0.43));
+    text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
   //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
@@ -308,18 +380,12 @@ function myFunction() {
   }
   document.getElementById("game").innerHTML = text;
   //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
-
-  Guess = "";
-}
-window.addEventListener('keydown', (e) => {
-  if (e.keyCode === 32 && e.target === document.body) {
-    e.preventDefault();
-  }
-});
-function enterPressed(){
-  myFunction();
   Guess = "";
   reset("");
+}
+else{
+  playSound(doink);
+}
 }
 function reset(s){
   Cursor = Bound;
@@ -351,6 +417,7 @@ function reset(s){
   }
 }
 function clickLetter(c){
+  playSound(key1);
   if (c == "1"){
     Guess += "'";
     document.getElementById('inputsquares').innerHTML = "";
@@ -367,61 +434,79 @@ function clickLetter(c){
 }
 function backPressed(){
 if(Guess.length > 0){
+  playSound(key2);
   document.getElementById('inputsquares').innerHTML = "";
   Guess = Guess.slice(0, Guess.length - 1);
   reset(Guess);
-}}
+}
+else{
+  playSound(doink);
+}
+}
 function clickSpace(){
-  if (Guess.length > 0 && Guess.slice(-1) != " "){
-  Guess += " ";
-  Cursor += 20;}
+  if (Guess.length > 0 && Guess.slice(-1) != " " && Guess.length < (13 * 5 - 7)){
+    playSound(key2);
+    Guess += " ";
+    Cursor += 20;
+  }
+  else{
+    playSound(doink);
+  }
 }
 function enter(event) {
   var x = event.key;
   if (x != "1"){
-
   if (x == "'"){
+    playSound(key1);
     x = "1";
   }
   if (x == "Enter") {
     enterPressed();
   }
   else if (x == "Backspace"){
+    darkLetter("2");
     backPressed();
   }
   else if (x == " ") {
-    if (Guess.length > 0 && Guess.length < (13 * 5 - 7) && Guess.slice(-1) != " "){
-    Guess += x;
-    Cursor += 20;}
+    darkLetter(" ");
+    clickSpace();
   }
   else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!1".includes(x) && Guess.length < (13 * 5 - 7)){
     darkLetter(x.toUpperCase());
     clickLetter(x);
-  }}
+  }
+  else if (Guess.length >= (13 * 5 - 7)){
+    playSound(doink);
+  }
+}
 }
 function releaseKey(event) {
   var x = event.key;
   if (x == "'"){
     x = "1";
   }
+  if (x == "Backspace"){
+    x = "2";
+  }
   // If the pressed keyboard button is "a" or "A" (using caps lock or shift), alert some text.
-  if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!1 ".includes(x)){
+  if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!12 ".includes(x)){
     lightLetter(x.toUpperCase());
     //document.getElementById('userinput').value += x;
   }
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
-  makeKeys();
+  makeAll();
   reset(Guess);
   document.getElementById("game").innerHTML = "";
-  text = prettyPrint(["GUESS: " + OldGuess], "GUESS: " + OldGuess, Keysize);
-  text += prettyPrint(current, goalSentence, parseInt(Height * 0.23));
+  text = prettyPrint("GUESS: " + OldGuess, Keysize);
+  current = update(OldGuess, goalSentence);
+  text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint(["TRY AGAIN"], "TRY AGAIN", parseInt(Height * 0.23) + Keysize + Bound);
+    text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
   }
   else{
-    text += prettyPrint(["YOU WON!"], "Y!", parseInt(Height * 0.43));
+    text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
   }
   document.getElementById("game").innerHTML = text;
   if (Prevs.length > 0){
