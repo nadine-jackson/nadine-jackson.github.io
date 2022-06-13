@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v18</title>
+  <title>Sentencle v19</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -423,7 +423,6 @@ function reset(s){
   }
 }
 function clickLetter(c){
-  if (recentLetter != c){
   playSound(key1);
   if (c == "1"){
     Guess += "'";
@@ -438,8 +437,6 @@ function clickLetter(c){
   document.getElementById('inputsquares').innerHTML = "";
   reset(Guess);
 }
-}
-
 }
 function backPressed(){
 if(Guess.length > 0){
@@ -523,8 +520,9 @@ function mobileClickLetter(c){
   lightLetter(c);
 }
 function mouseClickLetter(c){
+  if (recentLetter != c){
   clickLetter(c);
-  document.getElementById("banner").style["background-color"] = "Red";
+  document.getElementById("banner").style["background-color"] = "Red";}
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
