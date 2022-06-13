@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v15</title>
+  <title>Sentencle v16</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -169,7 +169,7 @@ function makeGame(){
 }
 function makeKey(c, x, y, w=Keysize, h=Keysize){
   keyID = "key" + c;
-  md = " onmousedown=\"clickLetter('" + c + "')\"";
+  md = " onmousedown=\"mouseClickLetter('" + c + "')\"";
   if (c == " "){
     md = " onmousedown=\"clickSpace()\"";
   }
@@ -520,6 +520,10 @@ function mobileClickLetter(c){
   clickLetter(c);
 }
   lightLetter(c);
+}
+function mouseClickLetter(c){
+  clickLetter(c);
+  document.getElementById("banner").style["background-color"] = "Red";
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
