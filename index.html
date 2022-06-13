@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v16</title>
+  <title>Sentencle v17</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -200,7 +200,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
     document.getElementById(keyID).style["color"] = "#E5F9E0";
   }
   document.getElementById(keyID).addEventListener('touchend', event => {
-    event.preventDefault();
+    event.stopPropagation();
   });
   document.getElementById(keyID).style["text-align"] = "center";
   document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
