@@ -54,6 +54,9 @@ function apnormal(){
   appear();
   normal();
 }
+element.addEventListener('touchend', event => {
+  event.preventDefault();
+});
 </script>
 
 </body>
