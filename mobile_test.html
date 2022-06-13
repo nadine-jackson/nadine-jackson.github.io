@@ -2,14 +2,15 @@
 <html>
 
 <head>
-  <title>Sentencle Mobile v2</title>
+  <title>Sentencle Mobile v3</title>
 </head>
 <body id="body" onLoad="makeAll()">
 
-<div id="top button" ontouchstart="light()" ontouchend="normal()"></div>
-<div id="bottom button" ontouchstart="dark()" ontouchend="normal()"></div>
+<div id="top button" onmouseover="dark()" onmousedown="appear()" onmouseout="normal()" ontouchstart="dark()" ontouchend="apnormal()"></div>
+<div id="bottom button" onmouseover="dark()" onmousedown="appear()" onmouseout="normal()" ontouchstart="dark()" ontouchend="apnormal()"></div>
 
 <script>
+  clickCount = 0;
   function makeTop(){
     document.getElementById("top button").style["background-color"] = "Gold";
     document.getElementById("top button").style["margin"] = "auto";
@@ -44,6 +45,14 @@ function normal(){
 function light(){
   document.getElementById("top button").style["background-color"] = "Yellow";
   document.getElementById("bottom button").style["background-color"] = "LightGray";
+}
+function appear(){
+  clickCount += 1;
+  document.getElementById("top button").innerHTML = clickCount.toString();
+}
+function apnormal(){
+  appear();
+  normal();
 }
 </script>
 
