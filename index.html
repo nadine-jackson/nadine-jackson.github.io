@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v19</title>
+  <title>Sentencle v20</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -175,9 +175,9 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   }
   mov = " onmouseover=\"darkLetter('" + c + "')\"";
   mo = " onmouseout=\"lightLetter('" + c + "')\"";
-  ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
-  te = " ontouchend=\"mobileClickLetter('" + c + "')\"";
-
+  //ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
+  //te = " ontouchend=\"mobileClickLetter('" + c + "')\"";
+  te = " ontouchend=\"lightLetter('" + c + "')\"";
   if (c == "1"){
     c = "'";
   }
