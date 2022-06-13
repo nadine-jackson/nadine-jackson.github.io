@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v17</title>
+  <title>Sentencle v18</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -43,7 +43,7 @@ var key1 = new Audio('./KeyPress1.mp3');
 var key2 = new Audio('./KeyPress2.mp3');
 var doink = new Audio('./doink.mp3');
 var SoundOn = true;
-var LockedLetters = new Set();
+var recentLetter = '4';
 function takeGuess() {
   var x = document.getElementById("frm1");
   var text = "";
@@ -423,7 +423,7 @@ function reset(s){
   }
 }
 function clickLetter(c){
-  if (! LockedLetters.has(c)){
+  if (recentLetter != c){
   playSound(key1);
   if (c == "1"){
     Guess += "'";
@@ -519,6 +519,7 @@ function mobileClickLetter(c){
   else{
   clickLetter(c);
 }
+  recentLetter = c;
   lightLetter(c);
 }
 function mouseClickLetter(c){
