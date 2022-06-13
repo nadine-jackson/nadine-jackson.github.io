@@ -2,8 +2,8 @@
 <html>
 
 <head>
-  <title>Sentencle v13</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Sentencle v14</title>
+  <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
 
@@ -169,35 +169,39 @@ function makeGame(){
 }
 function makeKey(c, x, y, w=Keysize, h=Keysize){
   keyID = "key" + c;
-  md = " onclick=\"clickLetter('" + c + "')\"";
+  md = " onmousedown=\"clickLetter('" + c + "')\"";
   if (c == " "){
-    md = " onclick=\"clickSpace()\"";
+    md = " onmousedown=\"clickSpace()\"";
   }
-  mov = " onmouseover=\"darkLetter('" + c + "')\"" + " ontouchstart=\"mobileClickLetter('" + c + "event')\"";
-  mo = " onmouseout=\"lightLetter('" + c + "')\"" + " ontouchend=\"mobileLightLetter('" + c + "')\"";
+  mov = " onmouseover=\"darkLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"";
+  ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
+  te = " ontouchstart=\"mobileClickLetter('" + c + "')\"";
 
   if (c == "1"){
     c = "'";
   }
   else if (c == "2"){
     c = "<";
-    md = " onclick=\"backPressed()\"";
+    md = " onmousedown=\"backPressed()\"";
   }
   if (c == "3"){
     c = "e";
-    md = " onclick=\"enterPressed()\"";
-    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + "Enter" +  "</div>";
+    md = " onmousedown=\"enterPressed()\"";
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "#A3F7B5";
     document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.5)).toString() + "px";
     document.getElementById(keyID).style["color"] = "DarkSlateGray";
   }
   else{
-    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ">" + c +  "</div>";
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + c +  "</div>";
     document.getElementById(keyID).style["background-color"] = "#035E7B";
     document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.8)).toString() + "px";
     document.getElementById(keyID).style["color"] = "#E5F9E0";
   }
-
+  document.getElementById(keyID).addEventListener('touchend', event => {
+    event.preventDefault();
+  });
   document.getElementById(keyID).style["text-align"] = "center";
   document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
   document.getElementById(keyID).style["width"] = w.toString() + "px";
@@ -499,12 +503,12 @@ function releaseKey(event) {
     //document.getElementById('userinput').value += x;
   }
 }
-function mobileLightLetter(c){
-  lightLetter(c);
+function mobileDarkLetter(c){
+  darkLetter(c);
 }
 function mobileClickLetter(c, x){
-  x.preventDefault();
   clickLetter(c);
+  lightLetter(c);
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
