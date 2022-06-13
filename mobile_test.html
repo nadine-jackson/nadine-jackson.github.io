@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <title>Sentencle Mobile v4</title>
+  <title>Sentencle Mobile v5</title>
 </head>
 <body id="body" onLoad="makeAll()">
 
 <div id="top button" onmouseover="dark()" onmousedown="appear()" onmouseout="normal()" ontouchstart="dark()" ontouchend="apnormal()"></div>
-<div id="bottom button" onmouseover="dark()" onmousedown="appear()" onmouseout="normal()" ontouchstart="dark()" ontouchend="apnormal()"></div>
+<div id="bottom button" onmouseover="dark()" onmousedown="appear()" onmouseout="normal()" ontouchstart="dark()" ontouchend="apnormal()">v5</div>
 
 <script>
   clickCount = 0;
@@ -56,6 +56,7 @@ function appear(){
 function apnormal(){
   appear();
   normal();
+  document.getElementById("bottom button").innerHTML = "fired";
 }
 
 </script>
