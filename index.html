@@ -184,11 +184,11 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   }
   else if (c == "2"){
     c = "<";
-    md = " onmousedown=\"backPressed()\"";
+    //md = " onmousedown=\"backPressed()\"";
   }
   if (c == "3"){
     c = "e";
-    md = " onmousedown=\"enterPressed()\"";
+    //md = " onmousedown=\"enterPressed()\"";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "#A3F7B5";
     document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.5)).toString() + "px";
@@ -424,20 +424,34 @@ function reset(s){
   }
 }
 function clickLetter(c){
-  playSound(key1);
-  if (c == "1"){
-    Guess += "'";
-    document.getElementById('inputsquares').innerHTML = "";
-    reset(Guess);
+  if (Guess.length < (13 * 5 - 7)){
+    playSound(key1);
+    if (c == "1"){
+      Guess += "'";
+      document.getElementById('inputsquares').innerHTML = "";
+      reset(Guess);
 
-    Cursor += 20;
+      Cursor += 20;
+    }
+    else if (c == " "){
+      clickSpace();
+    }
+    else if (c == "2"){
+      backPressed();
+    }
+    else if (c == "3"){
+      enterPressed();
+    }
+    else{
+      Guess += c.toUpperCase();
+      //document.getElementById('userinput').value += x;
+      document.getElementById('inputsquares').innerHTML = "";
+      reset(Guess);
+    }
   }
   else{
-  Guess += c.toUpperCase();
-  //document.getElementById('userinput').value += x;
-  document.getElementById('inputsquares').innerHTML = "";
-  reset(Guess);
-}
+    playSound(doink);
+  }
 }
 function backPressed(){
 if(Guess.length > 0){
@@ -511,25 +525,17 @@ function mouseDarkLetter(c){
 }
 }
 function mobileClickLetter(c){
-  if (c == " "){
-    clickSpace();
-  }
-  else if (c == "2"){
-    backPressed();
-  }
-  else if (c == "3"){
-    enterPressed();
-  }
-  else{
   clickLetter(c);
-}
-
   lightLetter(c);
 }
 function mouseClickLetter(c){
   if (recentLetter != c){
   clickLetter(c);
-  document.getElementById("banner").style["background-color"] = "Red";}
+  document.getElementById("banner").style["background-color"] = "Red";
+  }
+  else{
+    recentLetter = c;
+  }
 }
 function redraw(){
   document.getElementById("keyboard").innerHTML = "";
