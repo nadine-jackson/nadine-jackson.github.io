@@ -204,6 +204,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
     event.preventDefault();
   });
   document.getElementById(keyID).style["text-align"] = "center";
+  document.getElementById(keyID).style["user-select"] = "none";
   document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
   document.getElementById(keyID).style["width"] = w.toString() + "px";
   document.getElementById(keyID).style["height"] = h.toString() + "px";
@@ -532,7 +533,7 @@ function mobileClickLetter(c){
 function mouseClickLetter(c){
   if (recentLetter != c){
   clickLetter(c);
-  document.getElementById("banner").style["background-color"] = "Red";
+  //document.getElementById("banner").style["background-color"] = "Red";
   }
   else{
     recentLetter = "4";
