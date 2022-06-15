@@ -527,7 +527,7 @@ function mouseDarkLetter(c){
 }
 }
 function mobileClickLetter(c){
-  mute();
+  if (SoundOn){mute();}
   clickLetter(c);
   lightLetter(c);
 }
