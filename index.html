@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Sentencle v21</title>
+  <title>Sentencle v22</title>
   <link rel="stylesheet" href="style.css"></link>
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
@@ -173,7 +173,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   if (c == " "){
     md = " onmousedown=\"clickSpace()\"";
   }
-  mov = " onmouseover=\"darkLetter('" + c + "')\"";
+  mov = " onmouseover=\"mouseDarkLetter('" + c + "')\"";
   mo = " onmouseout=\"lightLetter('" + c + "')\"";
   ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
   te = " ontouchend=\"mobileClickLetter('" + c + "')\"";
@@ -504,6 +504,11 @@ function releaseKey(event) {
 function mobileDarkLetter(c){
   darkLetter(c);
   recentLetter = c;
+}
+function mouseDarkLetter(c){
+  if (recentLetter != c){
+  darkLetter(c);
+}
 }
 function mobileClickLetter(c){
   if (c == " "){
