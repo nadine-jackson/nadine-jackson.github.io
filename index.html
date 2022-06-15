@@ -170,9 +170,9 @@ function makeGame(){
 function makeKey(c, x, y, w=Keysize, h=Keysize){
   keyID = "key" + c;
   md = " onmousedown=\"mouseClickLetter('" + c + "')\"";
-  if (c == " "){
-    md = " onmousedown=\"clickSpace()\"";
-  }
+  //if (c == " "){
+    //md = " onmousedown=\"clickSpace()\"";
+  //}
   mov = " onmouseover=\"mouseDarkLetter('" + c + "')\"";
   mo = " onmouseout=\"lightLetter('" + c + "')\"";
   ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
@@ -187,7 +187,7 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
     //md = " onmousedown=\"backPressed()\"";
   }
   if (c == "3"){
-    c = "e";
+    //c = "e";
     //md = " onmousedown=\"enterPressed()\"";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "#A3F7B5";
@@ -468,7 +468,8 @@ function clickSpace(){
   if (Guess.length > 0 && Guess.slice(-1) != " " && Guess.length < (13 * 5 - 7)){
     playSound(key2);
     Guess += " ";
-    Cursor += 20;
+    //Cursor += 20;
+    //reset(Guess);
   }
   else{
     playSound(doink);
@@ -534,7 +535,7 @@ function mouseClickLetter(c){
   document.getElementById("banner").style["background-color"] = "Red";
   }
   else{
-    recentLetter = c;
+    recentLetter = "4";
   }
 }
 function redraw(){
