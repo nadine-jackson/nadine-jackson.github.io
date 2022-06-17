@@ -155,11 +155,24 @@ function makeBanner(){
   lbound = (Width - Keysize * "SENTENCLE".length) / 2;
   document.getElementById("banner").innerHTML += prettyPrint("SENTENCLE", y0, lbound);
 }
+function moveCursor(y = Bound){
+  document.getElementById("cursor").style["height"] = (Keysize).toString() + "px";
+  document.getElementById("cursor").style["width"] = (Keysize / 10).toString() + "px";
+  document.getElementById("cursor").style["left"] = (Cursor).toString() + "px";
+  document.getElementById("cursor").style["top"] = (y).toString() + "px";
+}
+function makeCursor(y = Bound){
+  c = "<div id='cursor'></div>";
+  document.getElementById("inputsquares").innerHTML += c;
+  moveCursor(y);
+}
 function makeInput(){
   document.getElementById("inputsquares").style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
   document.getElementById("inputsquares").style["width"] = (Width).toString() + "px";
   document.getElementById("inputsquares").style["top"] = (InputTop).toString() + "px";
   document.getElementById("inputsquares").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+  //document.getElementById("cursor").style["height"] = (100).toString() + "px";
+  makeCursor();
 }
 function makeGame(){
   document.getElementById("game").style["height"] = (Height/2).toString() + "px";
@@ -225,7 +238,7 @@ function makeKeys(){
   document.getElementById("keyboard").style["bottom"] = "0px";//(Height).toString() + "px";
   document.getElementById("keyboard").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
 
-  Bound = (Width - 13 * Keysize - 1) / 2;
+
   keyWidth = parseInt(Width / 11);
   keyHeight = parseInt(kbh / 5);
   keyWidth = parseInt(keyWidth * parseFloat(10.0 / 11));
@@ -272,6 +285,7 @@ function makeAll(){
   OutputTop = Height * 3 / 4;
   GameTop = Height / 4;
   Keysize = Width / 15;
+  Bound = (Width - 13 * Keysize - 1) / 2;
   makeInput();
   makeGame();
   makeBanner();
@@ -399,7 +413,7 @@ function reset(s){
   Cursor = Bound;
   y = Bound;
   document.getElementById('inputsquares').style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
-  document.getElementById('inputsquares').innerHTML = "";
+ document.getElementById('inputsquares').innerHTML = "";
   GameTop = Height / 4;
   document.getElementById('game').style["top"] = (GameTop).toString() + "px";
   document.getElementById('game').style["height"] = (Height / 2).toString() + "px";
@@ -423,6 +437,7 @@ function reset(s){
       Cursor = newXY(Cursor, y, 0, Bound, Width - Bound);
     }
   }
+  makeCursor(y);
 }
 function clickLetter(c){
   if (Guess.length < (13 * 5 - 7)){
@@ -470,7 +485,7 @@ function clickSpace(){
     playSound(key2);
     Guess += " ";
     //Cursor += 20;
-    //reset(Guess);
+    reset(Guess);
   }
   else{
     playSound(doink);
