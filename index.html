@@ -19,6 +19,9 @@
 <div id="keyboard">
 
 </div>
+<div id="menu" onclick='closeMenu()'>
+
+</div>
 
 <script src="./sentences.txt"></script>
 <script>
@@ -146,6 +149,33 @@ function makeSound(){
   document.getElementById("sound").style["top"] = "25%";
   document.getElementById("sound").style["right"] = InputTop / 4 + "px";
 }
+function makeLine(n, y){
+  document.getElementById("menu-button").innerHTML += "<div class='line' id='line" + n.toString() +  "'></div>";
+  height = 20;
+  width = 100;
+  //top = y;
+  left = 5;
+  document.getElementById("line" + n.toString()).style['height'] = height.toString() + "%";
+  document.getElementById("line" + n.toString()).style['width'] = width.toString() + "%";
+  document.getElementById("line" + n.toString()).style['top'] = (y).toString() + "%";
+  document.getElementById("line" + n.toString()).style['left'] = left.toString() + "%";
+  document.getElementById("line" + n.toString()).style['border-radius'] =  (Keysize / 10).toString() + "px";
+}
+function makeMenu(){
+  document.getElementById("banner").innerHTML += "<div id='menu-button' onclick='openMenu()'></div>";
+  makeLine(1, 0);
+  makeLine(2, 40);
+  makeLine(3, 80);
+  document.getElementById("menu-button").style['position'] = "absolute";
+  document.getElementById("menu-button").style['height'] = (InputTop / 2).toString() + "px";
+  document.getElementById("menu-button").style['width'] = (InputTop / 2).toString() + "px";
+  document.getElementById("menu-button").style['top'] = (InputTop / 4).toString() + "px";
+  document.getElementById("menu-button").style['left'] = (InputTop / 4).toString() + "px";
+  //document.getElementById("menu-button").style['background-color'] = "Red";
+  document.getElementById("menu").style['height'] = (Height * 3 / 4).toString() + "px";
+  document.getElementById("menu").style['width'] = "0px";//(Width * 3 / 4).toString() + "px";
+  document.getElementById('menu').style['left'] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+}
 function makeBanner(){
   document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
   document.getElementById("banner").style["width"] = (Width).toString() + "px";
@@ -154,6 +184,7 @@ function makeBanner(){
   y0 = (InputTop - Keysize) / 2;
   lbound = (Width - Keysize * "SENTENCLE".length) / 2;
   document.getElementById("banner").innerHTML += prettyPrint("SENTENCLE", y0, lbound);
+  makeMenu();
 }
 function moveCursor(y = Bound){
   document.getElementById("cursor").style["height"] = (Keysize).toString() + "px";
@@ -286,6 +317,7 @@ function makeAll(){
   GameTop = Height / 4;
   Keysize = Width / 15;
   Bound = (Width - 13 * Keysize - 1) / 2;
+  Cursor = Bound;
   makeInput();
   makeGame();
   makeBanner();
@@ -576,7 +608,14 @@ function redraw(){
   }
 
 }
-function nothing(){}
+function openMenu(){
+  //document.getElementById("menu").style["animation-name"] = "slide-open";
+  //document.getElementById("menu").style["animation-duration"] = "1s";
+  document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
+}
+function closeMenu(){
+  document.getElementById("menu").style["width"] = "0px";
+}
 </script>
 
 </body>
