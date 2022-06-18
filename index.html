@@ -440,6 +440,10 @@ function enterPressed(){
 }
 else{
   playSound(doink);
+  document.getElementById("cursor").style["animation"] = "red, blink";
+  document.getElementById("cursor").style["animation-duration"] = "0.5s, 1s";
+  document.getElementById("cursor").style["animation-iteration-count"] = "1, infinite";
+  makeAll();
 }
 }
 function reset(s){
