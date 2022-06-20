@@ -47,14 +47,24 @@
   from {background-color: #2F9C95;}
   to {background-color: DarkRed;}
 }
+.flash-red{
+  opacity: 100%;
+  animation-name: blink, red;
+  animation-duration: 1s, 0.5s;
+  animation-iteration-count: infinite, 1;
+  animation-delay: 0.2s, 0s;
+  animation-timing-function: steps(2, jump-none), linear;
+}
+.stop-flashing-red{
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(2, jump-none);
+}
 #cursor{
   margin: auto;
   background-color: #2F9C95;
   position: absolute;
-  animation-name: blink;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-
 }
 #keyboard{
   margin: auto;

@@ -188,14 +188,15 @@ function makeBanner(){
   makeMenu();
 }
 function moveCursor(y = Bound){
-  document.getElementById("cursor").style["height"] = (Keysize).toString() + "px";
-  document.getElementById("cursor").style["width"] = (Keysize / 10).toString() + "px";
   document.getElementById("cursor").style["left"] = (Cursor).toString() + "px";
   document.getElementById("cursor").style["top"] = (y).toString() + "px";
 }
 function makeCursor(y = Bound){
   c = "<div id='cursor'></div>";
   document.getElementById("inputsquares").innerHTML += c;
+  document.getElementById("cursor").classList.add("stop-flashing-red");
+  document.getElementById("cursor").style["height"] = (Keysize).toString() + "px";
+  document.getElementById("cursor").style["width"] = (Keysize / 10).toString() + "px";
   moveCursor(y);
 }
 function makeInput(){
@@ -407,7 +408,14 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
   }
 });
-
+function userError(){
+  playSound(doink);
+  list = document.getElementById("cursor").classList;
+  list.remove("stop-flashing-red");
+  list.remove("flash-red");
+  void document.getElementById("cursor").offsetWidth;
+  list.add("flash-red");
+}
 function enterPressed(){
   if (Guess.length > 0){
   playSound(key2);
@@ -439,18 +447,14 @@ function enterPressed(){
   reset("");
 }
 else{
-  playSound(doink);
-  document.getElementById("cursor").style["animation"] = "red, blink";
-  document.getElementById("cursor").style["animation-duration"] = "0.5s, 1s";
-  document.getElementById("cursor").style["animation-iteration-count"] = "1, infinite";
-  makeAll();
+  userError();
 }
 }
 function reset(s){
   Cursor = Bound;
   y = Bound;
   document.getElementById('inputsquares').style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
- document.getElementById('inputsquares').innerHTML = "";
+  document.getElementById('inputsquares').innerHTML = "";
   GameTop = Height / 4;
   document.getElementById('game').style["top"] = (GameTop).toString() + "px";
   document.getElementById('game').style["height"] = (Height / 2).toString() + "px";
@@ -503,7 +507,7 @@ function clickLetter(c){
     }
   }
   else{
-    playSound(doink);
+    userError;
   }
 }
 function backPressed(){
@@ -514,7 +518,7 @@ if(Guess.length > 0){
   reset(Guess);
 }
 else{
-  playSound(doink);
+  userError();
 }
 }
 function clickSpace(){
@@ -525,7 +529,7 @@ function clickSpace(){
     reset(Guess);
   }
   else{
-    playSound(doink);
+    userError();
   }
 }
 function enter(event) {
@@ -551,7 +555,7 @@ function enter(event) {
     clickLetter(x);
   }
   else if (Guess.length >= (13 * 5 - 7)){
-    playSound(doink);
+    userError();
   }
 }
 }
@@ -613,13 +617,15 @@ function redraw(){
   }
 
 }
+function makeHintButton(){}
 function openMenu(){
-  //document.getElementById("menu").style["animation-name"] = "slide-open";
-  //document.getElementById("menu").style["animation-duration"] = "1s";
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
+  document.getElementById("menu").innerHTML += "<div id='hint button'></div>";
+  makeHintButton();
 }
 function closeMenu(){
   document.getElementById("menu").style["width"] = "0px";
+  document.getElementById("menu").innerHTML = "";
 }
 </script>
 
