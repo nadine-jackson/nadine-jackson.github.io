@@ -107,7 +107,7 @@ function playSound(sound){
   if (SoundOn){
     //sound2 = sound.cloneNode();
     //sound2.play();
-    sound.pause();
+    sound.load();
     sound.play();
   }
 }
@@ -586,7 +586,7 @@ function mouseDarkLetter(c){
 }
 }
 function mobileClickLetter(c){
-  if (SoundOn){mute();}
+  //if (SoundOn){mute();}
   clickLetter(c);
   lightLetter(c);
 }
