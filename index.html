@@ -44,6 +44,9 @@ var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 var key1 = new Audio('./KeyPress1.mp3');
+var key3 = new Audio('./KeyPress3.mp3');
+var key4 = new Audio('./KeyPress4.mp3');
+var key5 = new Audio('./KeyPress5.mp3');
 var key2 = new Audio('./KeyPress2.mp3');
 var doink = new Audio('./doink.mp3');
 var SoundOn = true;
@@ -107,8 +110,28 @@ function playSound(sound){
   if (SoundOn){
     //sound2 = sound.cloneNode();
     //sound2.play();
-    sound.load();
-    sound.play();
+    if (sound == key1){
+      if (sound.currentTime == 0 || sound.ended){
+        sound.load();
+        sound.play();
+      }
+      else if (key3.currentTime == 0 || key3.ended){
+        key3.load();
+        key3.play();
+      }
+      else if (key4.currentTime == 0 || key4.ended){
+        key4.load();
+        key4.play();
+      }
+      else if (key5.currentTime == 0 || key5.ended){
+        key5.load();
+        key5.play();
+      }
+    }
+    else{
+      sound.load();
+      sound.play();
+    }
   }
 }
 
@@ -688,7 +711,7 @@ function giveHint(){
   clickInterval = setInterval(function () {
     clickLetter(hint.slice(n, n+1));
     n ++;
-  }, 250);
+  }, 100);
 }
 function makeHintButton(){
   document.getElementById("menu").innerHTML += "<div id='hint button' onclick='giveHint()'></div>";
