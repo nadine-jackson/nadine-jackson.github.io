@@ -20,7 +20,7 @@
 <div id="keyboard">
 
 </div>
-<div id="menu" onclick='closeMenu()'>
+<div id="menu">
 
 </div>
 
@@ -57,6 +57,7 @@ function takeGuess() {
   }
   return text;
 }
+var clickInterval;
 function darkLetter(c){
   document.getElementById("key" + c).style["background-color"] = "DarkSlateGray";
   document.getElementById("key" + c).style["color"] = "#E5F9E0";
@@ -394,7 +395,7 @@ function printAll(l, goalSentence){
   y = Keysize;
   ret = "";
   for (i = l.length - 1; i >= 0; i--){
-    s = l[i].join("*");
+    s = l[i];
     ret += prettyPrint(s, y);
     y += Keysize * 2;
   }
@@ -417,6 +418,7 @@ function userError(){
   list.add("flash-red");
 }
 function enterPressed(){
+  clearInterval(clickInterval);
   if (Guess.length > 0){
   playSound(key2);
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
@@ -437,8 +439,8 @@ function enterPressed(){
   }
 
   //Prev += pretty_print(current, goalSentence, Level);
-  if (current.length > 0){
-    Prevs.push(current);
+  if (! Prevs.includes(current.join("*")) && "*" != current.join("*")){
+    Prevs.push(current.join("*"));
     Level += 6 * Keysize;
   }
   document.getElementById("game").innerHTML = text;
@@ -597,6 +599,7 @@ function mouseClickLetter(c){
   }
 }
 function redraw(){
+
   document.getElementById("keyboard").innerHTML = "";
   makeAll();
   reset(Guess);
@@ -617,10 +620,82 @@ function redraw(){
   }
 
 }
-function makeHintButton(){}
+function longestPrev(){
+  let longest = "";
+  for (let i = 0; i < Prevs.length; i++){
+    let s = Prevs[i];
+    while (s.includes("*")){
+      s = s.replace("*", "");
+    }
+    if (s.length > longest.length){
+      longest = s;
+    }
+  }
+
+  return longest;
+}
+function addHelpfulChar(s){
+  let goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  if (s.length >= goalSentence.length){
+    return goalSentence;
+  }
+  let l = [];
+  let inWord = [];
+  let sCopy = s.slice(0);
+  let i = 0;
+
+  while (goalSentence.length > 0){
+    if (sCopy == "" ||  sCopy.slice(0, 1) != goalSentence.slice(0, 1)){
+      l.push(i);
+    }
+    else{
+      inWord.push(i);
+      sCopy = sCopy.slice(1);
+    }
+    goalSentence = goalSentence.slice(1);
+    i += 1;
+  }
+
+  let newCharIndex = Math.floor(Math.random() * l.length);
+  let ret = "";
+
+  i = 0;
+  goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  while (inWord[i] < l[newCharIndex]){
+    ret += goalSentence.slice(inWord[i], inWord[i] + 1);
+    i += 1;
+  }
+  ret += goalSentence[l[newCharIndex]];
+  while (i < inWord.length){
+    ret += goalSentence.slice(inWord[i], inWord[i] + 1);
+    i += 1;
+  }
+  if (ret.slice(0, 1) == " " || ret.includes("  ")){
+    ret = addHelpfulChar(s);
+  }
+  return ret;
+}
+function betterGuess(){
+  let bestGuess = longestPrev();
+  bestGuess = addHelpfulChar(bestGuess);
+  return bestGuess + "3";
+}
+function giveHint(){
+  closeMenu();
+  let n = 0;
+  let hint = betterGuess();
+  clickInterval = setInterval(function () {
+    clickLetter(hint.slice(n, n+1));
+    n ++;
+  }, 250);
+}
+function makeHintButton(){
+  document.getElementById("menu").innerHTML += "<div id='hint button' onclick='giveHint()'></div>";
+  document.getElementById("hint button").innerHTML = prettyPrint("HINT", Bound, Bound);
+  //document.getElementById("hint button").onclick = giveHint();
+}
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
-  document.getElementById("menu").innerHTML += "<div id='hint button'></div>";
   makeHintButton();
 }
 function closeMenu(){
