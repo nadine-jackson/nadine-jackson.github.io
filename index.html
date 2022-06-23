@@ -668,7 +668,6 @@ function redraw(){
     Level = parseInt(6 * Keysize * Prevs.length + Height * 0.25);
     document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(Prevs, goalSentence) + "</div>";
   }
-
 }
 function longestPrev(){
   let longest = "";
@@ -677,11 +676,13 @@ function longestPrev(){
     while (s.includes("*")){
       s = s.replace("*", "");
     }
+    while (s.includes(" ")){
+      s = s.replace(" ", "");
+    }
     if (s.length > longest.length){
       longest = s;
     }
   }
-
   return longest;
 }
 function addHelpfulChar(s){
