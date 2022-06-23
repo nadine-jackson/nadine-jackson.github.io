@@ -74,7 +74,7 @@ else{
   document.getElementById("key" + c).style["background-color"] = "#035E7B";
 }
 }
-function update(guess, goal) {
+function update2(guess, goal) {
   guess = guess.toUpperCase();
   streak = false;
   l = [];
@@ -105,6 +105,32 @@ function update(guess, goal) {
     }
   return l;
   //return ["HELLO WORLD."]
+}
+function update(guess, goal) {
+  let i = 0;
+  while (i < guess.length && goal.includes(guess.slice(i, i+1))){
+    i += 1;
+  }
+
+  let letterbank = guess.slice(0, i) + " ";
+  let s = "";
+
+  for (i = 0; i < goal.length; i++){
+    //return goal.split(" ");
+    if (letterbank.includes(goal.slice(i, i+1))){
+
+      s += goal.charAt(i);
+    }
+    else{
+
+      if (s.slice(-1) != "*"){
+        s += "*";
+      }
+
+    }
+  }
+
+  return s.split("*");
 }
 function playSound(sound){
   if (SoundOn){
