@@ -8,7 +8,7 @@
 </head>
 <body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
 
-<div id="banner"></div>
+
 
 <div id="inputsquares">
 </div>
@@ -20,9 +20,13 @@
 <div id="keyboard">
 
 </div>
+<div id="winScreen">
+</div>
+<div id="banner"></div>
 <div id="menu">
 
 </div>
+
 
 <script src="./sentences.txt"></script>
 <script>
@@ -49,6 +53,7 @@ var key4 = new Audio('./KeyPress4.mp3');
 var key5 = new Audio('./KeyPress5.mp3');
 var key2 = new Audio('./KeyPress2.mp3');
 var doink = new Audio('./doink.mp3');
+var winJingle = new Audio('./winJingle.mp3');
 var SoundOn = true;
 var recentLetter = '4';
 function takeGuess() {
@@ -467,6 +472,37 @@ function userError(){
   void document.getElementById("cursor").offsetWidth;
   list.add("flash-red");
 }
+function whyIsItBroken(word, id, y){
+  //document.getElementById(id).innerHTML = word;
+  document.getElementById(id).style['height'] = Keysize.toString() + "px";
+  document.getElementById(id).style['width'] = (Keysize * word.length).toString() + "px";
+  document.getElementById(id).style['top'] = (y).toString() + "px";
+  document.getElementById(id).style['left'] = "0px";//(Width / 2 - Keysize * word.length / 2).toString() + "px";
+  document.getElementById(id).style['background-color'] = "Red";
+  let num = id.split("winWord")[1];
+  document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
+  document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, Keysize * word.length);//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
+}
+function winSequence(){
+  document.getElementById("winScreen").style['height'] = (Height * 3 / 4 - InputTop).toString() + "px";
+  document.getElementById("winScreen").style['top'] = (InputTop).toString() + "px";
+  document.getElementById("winScreen").style['left'] = (window.innerWidth / 2 - Width / 2).toString() + "px";
+  document.getElementById("winScreen").style['width'] = (Width).toString() + "px";
+  let words = (SentenceBank[parseInt(dd) - 1].toUpperCase()).split(' ');
+  var i = 0;
+  var y = Bound;
+  let newClass = "winWord";
+  newID = newClass + "0";
+  //let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
+  for (i = 0; i < words.length; i++){
+    newID = "winWord" + i.toString();
+    //document.getElementById("winScreen").innerHTML += (i).toString();
+    document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\"></div>";
+    document.getElementById(newID).classList.add(newClass);
+    whyIsItBroken(words[i], newID, y);
+    y += Keysize;
+  }
+}
 function enterPressed(){
   clearInterval(clickInterval);
   if (Guess.length > 0){
@@ -481,6 +517,8 @@ function enterPressed(){
   }
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+    playSound(winJingle);
+    winSequence();
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
   //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"

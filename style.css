@@ -17,11 +17,13 @@
   margin: auto;
   position: absolute;
 }
+
 #character{
   background-color: #035E7B;
   color: #E5F9E0;
   text-align: center;
   font-family: monospace,sans-serif;
+  position: absolute;
 }
 #spacer{
   background-color: #2F9C95;
@@ -66,11 +68,27 @@
   background-color: #2F9C95;
   position: absolute;
 }
+#winScreen{
+  margin: auto;
+  background-color: #2F9C95;
+  position: absolute;
+}
 #keyboard{
   margin: auto;
   background-color: #2F9C95;
   position: fixed;
   touch-action: manipulation;
+}
+@keyframes slide-in {
+  from {opacity: 0%; left: 0%;}
+  to {opacity: 100%; left: 50%;}
+}
+.winWord{
+  background-color: #2F9C95;
+  position: absolute;
+  animation-name: slide-in;
+  animation-fill-mode: forwards;
+  animation-duration: 0.25s;
 }
 #banner{
   margin: auto;
