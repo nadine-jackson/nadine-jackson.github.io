@@ -529,7 +529,7 @@ function enterPressed(){
   text = prettyPrint("GUESS: " + OldGuess, Bound);
   text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint("TRY AGAIN - " + num_guesses_str +" GUESSES", parseInt(Height * 0.43));
+    text += prettyPrint("TRY AGAIN - " + num_guesses_str, parseInt(Height * 0.43));
   }
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
