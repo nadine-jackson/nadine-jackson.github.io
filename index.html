@@ -515,6 +515,12 @@ function winSequence(){
 }
 function enterPressed(){
   clearInterval(clickInterval);
+  let num_guesses_str = getCookie("guesses");
+  if (num_guesses_str == ""){
+    let num_guesses = 0;
+  }
+  let num_guesses = parseInt(num_guesses_str);
+  setCookie(guesses, (num_guesses + 1).toString());
   if (Guess.length > 0){
   playSound(key2);
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
@@ -523,7 +529,7 @@ function enterPressed(){
   text = prettyPrint("GUESS: " + OldGuess, Bound);
   text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
-    text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
+    text += prettyPrint("TRY AGAIN - " + num_guesses +" GUESSES", parseInt(Height * 0.43));
   }
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
@@ -800,6 +806,39 @@ function openMenu(){
 function closeMenu(){
   document.getElementById("menu").style["width"] = "0px";
   document.getElementById("menu").innerHTML = "";
+}
+function setCookie(cname, cvalue) {
+  var d = new Date();
+  d.setHours(24,0,0,0);
+  let expires = "expires=" + d.toDateString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  let user = getCookie("username");
+  if (user != "") {
+    alert("Welcome again " + user);
+  } else {
+    user = prompt("Please enter your name:", "");
+    if (user != "" && user != null) {
+      setCookie("username", user, 365);
+    }
+  }
 }
 </script>
 
