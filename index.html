@@ -79,7 +79,7 @@ else{
   document.getElementById("key" + c).style["background-color"] = "#035E7B";
 }
 }
-function update2(guess, goal) {
+function updateHard(guess, goal) {
   guess = guess.toUpperCase();
   streak = false;
   l = [];
@@ -111,15 +111,13 @@ function update2(guess, goal) {
   return l;
   //return ["HELLO WORLD."]
 }
-function update(guess, goal) {
+function updateMedium(guess, goal) {
   let i = 0;
   while (i < guess.length && goal.includes(guess.slice(i, i+1))){
     i += 1;
   }
-
   let letterbank = guess.slice(0, i) + " ";
   let s = "";
-
   for (i = 0; i < goal.length; i++){
     //return goal.split(" ");
     if (letterbank.includes(goal.slice(i, i+1))){
@@ -127,15 +125,61 @@ function update(guess, goal) {
       s += goal.charAt(i);
     }
     else{
-
       if (s.slice(-1) != "*"){
         s += "*";
       }
-
     }
   }
-
   return s.split("*");
+}
+function updateEasy(guess, goal){
+  let i = 0;
+  let j = 0;
+  let s = "";
+  while (i < goal.length){
+    if (goal.charAt(i) = guess.charAt(j)){
+      s += goal.charAt(i);
+      j += 1;
+    }
+    else{
+      s += "*";
+    }
+    i += 1;
+  }
+  return s.split("*");
+}
+function updateSuperEasy(guess, goal) {
+  let i = 0;
+  while (i < guess.length && goal.includes(guess.slice(i, i+1))){
+    i += 1;
+  }
+  let letterbank = guess.slice(0, i) + " ";
+  let s = "";
+  for (i = 0; i < goal.length; i++){
+    //return goal.split(" ");
+    if (letterbank.includes(goal.slice(i, i+1))){
+
+      s += goal.charAt(i);
+    }
+    else{
+        s += "*";
+    }
+  }
+  return s.split("*");
+}
+function update(guess, goal, difficulty){
+  if (difficulty == "superEasy"){
+    updateSuperEasy();
+  }
+  else if (difficulty == "easy"){
+    updateEasy();
+  }
+  else if (difficulty == "medium"){
+    updateMedium();
+  }
+  else{
+    updateHard();
+  }
 }
 function playSound(sound){
   if (SoundOn){
@@ -534,7 +578,7 @@ function enterPressed(){
   setCookie("maxDifficulty", getCookie("mode"));
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
   OldGuess = Guess;
-  current = update(OldGuess, goalSentence);
+  current = update(OldGuess, goalSentence, getCookie("mode"));
   text = prettyPrint("GUESS: " + OldGuess, Bound);
   text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
