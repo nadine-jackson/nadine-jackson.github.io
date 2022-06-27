@@ -523,7 +523,7 @@ function enterPressed(){
     let num_guesses = parseInt(num_guesses_str);
   }
   //setCookie("guesses", (num_guesses + 1).toString());
-  setCookie("guesses", num_guesses_str);
+  setCookie("guesses", num_guesses.toString());
   if (Guess.length > 0){
   playSound(key2);
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
