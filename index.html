@@ -573,8 +573,8 @@ function enterPressed(){
   if (! prev_guesses.includes(current.join("*")) && "*" != current.join("*")){
     prev_guesses.push(current.join("*"));
     setCookie("prev_guesses", prev_guesses.join("-"));
-    Level = 6 * Keysize * prev_guesses.length;
   }
+  Level = 6 * Keysize * prev_guesses.length;
   document.getElementById("game").innerHTML = text;
   Guess = "";
   reset("");
