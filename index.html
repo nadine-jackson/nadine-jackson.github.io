@@ -304,18 +304,13 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   mo = " onmouseout=\"lightLetter('" + c + "')\"";
   ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
   te = " ontouchend=\"mobileClickLetter('" + c + "')\"";
-  //ts = "nothing()";
-  //te = " ontouchend=\"lightLetter('" + c + "')\"";
   if (c == "1"){
     c = "'";
   }
   else if (c == "2"){
     c = "<";
-    //md = " onmousedown=\"backPressed()\"";
   }
   if (c == "3"){
-    //c = "e";
-    //md = " onmousedown=\"enterPressed()\"";
     document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + "Enter" +  "</div>";
     document.getElementById(keyID).style["background-color"] = "#A3F7B5";
     document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.5)).toString() + "px";
@@ -568,22 +563,19 @@ function enterPressed(){
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
     setCookie("won", "true");
-
     winSequence();
   }
-  //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
-  //text += "<div id=\"character\"></div>\n <div id=\"block\"></div>\n </div>\n </div>"
-  if (Prevs.length > 0){
-    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(Prevs, goalSentence) + "</div>";
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prev_guesses = prev_guesses_str.split("-");
+  if (prev_guesses.length > 0){
+    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
   }
-
-  //Prev += pretty_print(current, goalSentence, Level);
-  if (! Prevs.includes(current.join("*")) && "*" != current.join("*")){
-    Prevs.push(current.join("*"));
+  if (! prev_guesses.includes(current.join("*")) && "*" != current.join("*")){
+    prev_guesses.push(current.join("*"));
+    setCookie("prev_guesses", prev_guesses);
     Level += 6 * Keysize;
   }
   document.getElementById("game").innerHTML = text;
-  //document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: " + (Level + 60).toString() + "px\">" + printAll(Prevs, goalSentence) + "</div>";
   Guess = "";
   reset("");
 }
