@@ -383,8 +383,8 @@ function makeAll(){
   if (getCookie("won") == "true"){
     winSequence();
   }
-  else{
-    setCookie("won", "false");
+  if (getCookie("mode") == ""){
+    setCookie("mode", "medium");
   }
 }
 
@@ -531,6 +531,7 @@ function enterPressed(){
   if (Guess.length > 0){
   playSound(key2);
   setCookie("guesses", (num_guesses + 1).toString());
+  setCookie("maxDifficulty", getCookie("mode"));
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
   OldGuess = Guess;
   current = update(OldGuess, goalSentence);
@@ -803,14 +804,100 @@ function giveHint(){
     n ++;
   }, 100);
 }
-function makeHintButton(){
-  document.getElementById("menu").innerHTML += "<div id='hint button' onclick='giveHint()'></div>";
+function makeHintButton(active = true){
+  let oc = "";
+  if (active){
+    oc = "onclick='giveHint()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='hint button' " + oc + "></div>";
   document.getElementById("hint button").innerHTML = prettyPrint("HINT", Bound, Bound);
-  //document.getElementById("hint button").onclick = giveHint();
+  if (! active){
+    document.getElementById("hint button").style['opacity'] = "0.5";
+  }
+}
+function makeSuperEasy(){
+  closeMenu();
+  setCookie("mode", "superEasy");
+}
+function makeSuperEasyButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeSuperEasy()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='super easy button' " + oc + "></div>";
+  document.getElementById("super easy button").innerHTML = prettyPrint("SUPER EASY", Bound + Keysize, Bound);
+  if (! active){
+    document.getElementById("super easy button").style['opacity'] = "0.5";
+  }
+}
+function makeEasy(){
+  closeMenu();
+  setCookie("mode", "easy");
+}
+function makeEasyButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeEasy()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='easy button' " + oc + "></div>";
+  document.getElementById("easy button").innerHTML = prettyPrint("EASY", Bound + 2 * Keysize, Bound);
+  if (! active){
+    document.getElementById("easy button").style['opacity'] = "0.5";
+  }
+}
+function makeMedium(){
+  closeMenu();
+  setCookie("mode", "medium");
+}
+function makeMediumButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeMedium()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='medium button' " + oc + "></div>";
+  document.getElementById("medium button").innerHTML = prettyPrint("MEDIUM", Bound + 3 * Keysize, Bound);
+  if (! active){
+    document.getElementById("medium button").style['opacity'] = "0.5";
+  }
+}
+function makeHard(){
+  closeMenu();
+  setCookie("mode", "hard");
+}
+function makeHardButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeHard()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='hard button' " + oc + "></div>";
+  document.getElementById("hard button").innerHTML = prettyPrint("HARD", Bound + 4 * Keysize, Bound);
+  if (! active){
+    document.getElementById("hard button").style['opacity'] = "0.5";
+  }
+}
+function makeCloseButton(){
+  oc = "onclick='closeMenu()'";
+  document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
+  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 5 * Keysize + Bound, Bound);
 }
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
-  makeHintButton();
+  makeHintButton(getCookie("won") != "true");
+  let button_enabled = true;
+  makeSuperEasyButton(button_enabled);
+  if (getCookie("maxDifficulty") == "superEasy"){
+    button_enabled = false;
+  }
+  makeEasyButton(button_enabled);
+  if (getCookie("maxDifficulty") == "easy"){
+    button_enabled = false;
+  }
+  makeMediumButton(button_enabled);
+  if (getCookie("maxDifficulty") == "medium"){
+    button_enabled = false;
+  }
+  makeHardButton(button_enabled);
+  makeCloseButton();
 }
 function closeMenu(){
   document.getElementById("menu").style["width"] = "0px";
