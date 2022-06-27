@@ -865,7 +865,7 @@ function makeMediumButton(active){
     oc = "onclick='makeMedium()'";
   }
   document.getElementById("menu").innerHTML += "<div id='medium button' " + oc + "></div>";
-  document.getElementById("medium button").innerHTML = prettyPrint("MEDIUM", Bound + 3 * Keysize, Bound);
+  document.getElementById("medium button").innerHTML = prettyPrint("MEDIUM", Bound + 2 * Keysize, Bound);
   if (! active){
     document.getElementById("medium button").style['opacity'] = "0.5";
   }
@@ -880,7 +880,7 @@ function makeHardButton(active){
     oc = "onclick='makeHard()'";
   }
   document.getElementById("menu").innerHTML += "<div id='hard button' " + oc + "></div>";
-  document.getElementById("hard button").innerHTML = prettyPrint("HARD", Bound + 4 * Keysize, Bound);
+  document.getElementById("hard button").innerHTML = prettyPrint("HARD", Bound + 3 * Keysize, Bound);
   if (! active){
     document.getElementById("hard button").style['opacity'] = "0.5";
   }
@@ -888,7 +888,7 @@ function makeHardButton(active){
 function makeCloseButton(){
   oc = "onclick='closeMenu()'";
   document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
-  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 5 * Keysize + Bound, Bound);
+  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 4 * Keysize + Bound, Bound);
 }
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
