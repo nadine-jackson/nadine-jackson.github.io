@@ -380,6 +380,12 @@ function makeAll(){
   makeGame();
   makeBanner();
   makeKeys();
+  if (getCookie("won") == "true"){
+    winSequence();
+  }
+  else{
+    setCookie("won", "false");
+  }
 }
 
 function prettyPrintVintage(l, g, y0, lbound = Bound, rbound = Width - Bound){
@@ -491,7 +497,7 @@ function makeWinWord(word, id, y){
 
 
   document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
-  document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, Keysize * word.length);//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
+  document.getElementById(id).innerHTML = prettyPrint(word, 0, -1 * Keysize, Keysize * word.length);//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
 }
 function winSequence(){
   document.getElementById("winScreen").style['height'] = (Height * 3 / 4 - InputTop).toString() + "px";
@@ -534,6 +540,7 @@ function enterPressed(){
   }
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+    setCookie("won", "true");
     playSound(winJingle);
     winSequence();
   }
