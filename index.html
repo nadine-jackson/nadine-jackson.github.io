@@ -888,7 +888,7 @@ function makeCloseButton(){
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
   makeHintButton(getCookie("won") != "true");
-  let button_enabled = true;
+  let button_enabled = "won" == "false";
   makeEasyButton(button_enabled);
   if (getCookie("maxDifficulty") == "Easy"){
     button_enabled = false;
