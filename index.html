@@ -137,7 +137,7 @@ function updateEasy(guess, goal){
   let j = 0;
   let s = "";
   while (i < goal.length){
-    if (goal.charAt(i) = guess.charAt(j)){
+    if (j < guess.length && goal.charAt(i) == guess.charAt(j)){
       s += goal.charAt(i);
       j += 1;
     }
@@ -158,7 +158,6 @@ function updateSuperEasy(guess, goal) {
   for (i = 0; i < goal.length; i++){
     //return goal.split(" ");
     if (letterbank.includes(goal.slice(i, i+1))){
-
       s += goal.charAt(i);
     }
     else{
