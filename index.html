@@ -169,16 +169,16 @@ function updateSuperEasy(guess, goal) {
 }
 function update(guess, goal, difficulty){
   if (difficulty == "superEasy"){
-    updateSuperEasy(guess, goal);
+    return updateSuperEasy(guess, goal);
   }
   else if (difficulty == "easy"){
-    updateEasy(guess, goal);
+    return updateEasy(guess, goal);
   }
   else if (difficulty == "medium"){
-    updateMedium(guess, goal);
+    return updateMedium(guess, goal);
   }
   else{
-    updateHard(guess, goal);
+    return updateHard(guess, goal);
   }
 }
 function playSound(sound){
