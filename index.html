@@ -383,7 +383,9 @@ function makeKeys(){
 function makeAll(){
   Width = window.innerWidth;
   Height = window.innerHeight;
-  Level = Height / 4;
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prev_guesses = prev_guesses_str.split("-");
+  Level = 6 * Keysize * prev_guesses.length + Height / 4;
   if (Height / parseFloat(Width) > 1.7787){
     Height = parseInt(1.7787 * Width);
   }
@@ -567,6 +569,7 @@ function enterPressed(){
   }
   let prev_guesses_str = getCookie("prev_guesses");
   let prev_guesses = prev_guesses_str.split("-");
+  Level = 6 * Keysize * prev_guesses.length + Height / 4;
   if (prev_guesses.length > 0){
     document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
   }
@@ -574,7 +577,6 @@ function enterPressed(){
     prev_guesses.push(current.join("*"));
     setCookie("prev_guesses", prev_guesses.join("-"));
   }
-  Level = 6 * Keysize * prev_guesses.length;
   document.getElementById("game").innerHTML = text;
   Guess = "";
   reset("");
@@ -583,6 +585,7 @@ else{
   userError();
 }
 }
+
 function reset(s){
   Cursor = Bound;
   y = Bound;
