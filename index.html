@@ -132,23 +132,8 @@ function updateMedium(guess, goal) {
   }
   return s.split("*");
 }
-function updateEasy(guess, goal){
-  let i = 0;
-  let j = 0;
-  let s = "";
-  while (i < goal.length){
-    if (j < guess.length && goal.charAt(i) == guess.charAt(j)){
-      s += goal.charAt(i);
-      j += 1;
-    }
-    else{
-      s += "*";
-    }
-    i += 1;
-  }
-  return s.split("*");
-}
-function updateSuperEasy(guess, goal) {
+
+function updateEasy(guess, goal) {
   let i = 0;
   while (i < guess.length && goal.includes(guess.slice(i, i+1))){
     i += 1;
@@ -167,10 +152,7 @@ function updateSuperEasy(guess, goal) {
   return s.split("*");
 }
 function update(guess, goal, difficulty){
-  if (difficulty == "superEasy"){
-    return updateSuperEasy(guess, goal);
-  }
-  else if (difficulty == "easy"){
+  if (difficulty == "Easy"){
     return updateEasy(guess, goal);
   }
   else if (difficulty == "medium"){
@@ -858,24 +840,9 @@ function makeHintButton(active = true){
     document.getElementById("hint button").style['opacity'] = "0.5";
   }
 }
-function makeSuperEasy(){
-  closeMenu();
-  setCookie("mode", "superEasy");
-}
-function makeSuperEasyButton(active){
-  let oc = "";
-  if (active){
-    oc = "onclick='makeSuperEasy()'";
-  }
-  document.getElementById("menu").innerHTML += "<div id='super easy button' " + oc + "></div>";
-  document.getElementById("super easy button").innerHTML = prettyPrint("SUPER EASY", Bound + Keysize, Bound);
-  if (! active){
-    document.getElementById("super easy button").style['opacity'] = "0.5";
-  }
-}
 function makeEasy(){
   closeMenu();
-  setCookie("mode", "easy");
+  setCookie("mode", "Easy");
 }
 function makeEasyButton(active){
   let oc = "";
@@ -883,7 +850,7 @@ function makeEasyButton(active){
     oc = "onclick='makeEasy()'";
   }
   document.getElementById("menu").innerHTML += "<div id='easy button' " + oc + "></div>";
-  document.getElementById("easy button").innerHTML = prettyPrint("EASY", Bound + 2 * Keysize, Bound);
+  document.getElementById("easy button").innerHTML = prettyPrint("EASY", Bound + Keysize, Bound);
   if (! active){
     document.getElementById("easy button").style['opacity'] = "0.5";
   }
@@ -927,12 +894,8 @@ function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
   makeHintButton(getCookie("won") != "true");
   let button_enabled = true;
-  makeSuperEasyButton(button_enabled);
-  if (getCookie("maxDifficulty") == "superEasy"){
-    button_enabled = false;
-  }
   makeEasyButton(button_enabled);
-  if (getCookie("maxDifficulty") == "easy"){
+  if (getCookie("maxDifficulty") == "Easy"){
     button_enabled = false;
   }
   makeMediumButton(button_enabled);
