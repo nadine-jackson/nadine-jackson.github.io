@@ -14,12 +14,13 @@
 <script>
 
 function up(){
+  let hc = parseInt(getCookie("hitcount")) + 1;
   document.getElementById("ctr").innerHTML = getCookie("hitcount");
 }
 function makeAll(){
   setCookie("hitcount", "0");
+  document.getElementById("ctr").innerHTML = getCookie("hitcount");
 }
-function makeAll(){}
 function setCookie(cname, cvalue) {
   var d = new Date();
   d.setHours(24,0,0,0);
