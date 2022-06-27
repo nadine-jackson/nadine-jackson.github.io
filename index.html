@@ -497,9 +497,10 @@ function makeWinWord(word, id, y){
 
 
   document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
-  document.getElementById(id).innerHTML = prettyPrint(word, 0, -1 * Keysize, Keysize * word.length);//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
+  document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, (Keysize * word.length + 1));//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
 }
 function winSequence(){
+  playSound(winJingle);
   document.getElementById("winScreen").style['height'] = (Height * 3 / 4 - InputTop).toString() + "px";
   document.getElementById("winScreen").style['top'] = (InputTop).toString() + "px";
   document.getElementById("winScreen").style['left'] = (window.innerWidth / 2 - Width / 2).toString() + "px";
@@ -541,7 +542,7 @@ function enterPressed(){
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
     setCookie("won", "true");
-    playSound(winJingle);
+
     winSequence();
   }
   //text += "<div id=\"game\">\n <div id=\"character\"></div>\n <div id=\"block\"></div>\n <div id=\"spacer\"></div>\n </div>"
