@@ -519,8 +519,11 @@ function enterPressed(){
   if (num_guesses_str == ""){
     let num_guesses = 0;
   }
-  let num_guesses = parseInt(num_guesses_str);
-  setCookie("guesses", (num_guesses + 1).toString());
+  else{
+    let num_guesses = parseInt(num_guesses_str);
+  }
+  //setCookie("guesses", (num_guesses + 1).toString());
+  setCookie("guesses", num_guesses_str);
   if (Guess.length > 0){
   playSound(key2);
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
