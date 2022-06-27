@@ -15,6 +15,7 @@
 
 function up(){
   let hc = parseInt(getCookie("hitcount")) + 1;
+  setCookie("hitcount", hc.toString());
   document.getElementById("ctr").innerHTML = getCookie("hitcount");
 }
 function makeAll(){
