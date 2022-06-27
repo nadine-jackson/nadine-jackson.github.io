@@ -516,16 +516,14 @@ function winSequence(){
 function enterPressed(){
   clearInterval(clickInterval);
   let num_guesses_str = getCookie("guesses");
-  if (num_guesses_str == ""){
-    let num_guesses = 0;
-  }
-  else{
-    let num_guesses = parseInt(num_guesses_str);
+  let num_guesses = 0;
+  if (num_guesses_str != ""){
+    num_guesses = parseInt(num_guesses_str);
   }
   //setCookie("guesses", (num_guesses + 1).toString());
-  setCookie("guesses", num_guesses.toString());
   if (Guess.length > 0){
   playSound(key2);
+  setCookie("guesses", (num_guesses + 1).toString());
   goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
   OldGuess = Guess;
   current = update(OldGuess, goalSentence);
