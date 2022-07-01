@@ -88,6 +88,10 @@
   from {opacity: 0; left: 100%; transform: translate(-100%, 0);}
   to {opacity: 1; left: 50%; transform: translate(-50%, 0);}
 }
+@keyframes fade-in {
+  from {opacity: 0%;}
+  to {opacity: 100%;}
+}
 .winWord{
   background-color: #2F9C95;
   position: absolute;
