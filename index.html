@@ -510,6 +510,7 @@ function userError(){
 function makeWinWord(word, id, y){
   //document.getElementById(id).innerHTML = word;
   let num = id.split("winWord")[1];
+  if (num < 5){
   if (num % 2 == 0){
     document.getElementById(id).style['left'] = "0px";
     document.getElementById(id).style['animation-name'] = "slide-left";
@@ -518,13 +519,17 @@ function makeWinWord(word, id, y){
     document.getElementById(id).style['left'] = Width.toString() + "px";
     document.getElementById(id).style['animation-name'] = "slide-right";
     document.getElementById(id).style['transform'] = "translate(-100%, 0)";
+  }}
+  else{
+    document.getElementById(id).style['left'] = (Width / 2).toString() + "px";
+    document.getElementById(id).style['transform'] = "translate(-50%, 0)";
+    document.getElementById(id).style['animation-name'] = "fade-in";
+    num -= 1;
   }
   document.getElementById(id).style['height'] = Keysize.toString() + "px";
   document.getElementById(id).style['width'] = (Keysize * word.length).toString() + "px";
   document.getElementById(id).style['top'] = (y).toString() + "px";
   document.getElementById(id).style['background-color'] = "Red";
-
-
   document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
   document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, (Keysize * word.length + 1));//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
 }
@@ -535,8 +540,11 @@ function winSequence(){
   document.getElementById("winScreen").style['left'] = (window.innerWidth / 2 - Width / 2).toString() + "px";
   document.getElementById("winScreen").style['width'] = (Width).toString() + "px";
   let words = (SentenceBank[parseInt(dd) - 1].toUpperCase()).split(' ');
+  words.push("");
+  words.push(getCookie("guesses") + " GUESSES");
+  words.push(getCookie("mode") + " MODE");
   var i = 0;
-  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * 5 / 2;
+  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * 8 / 2;
   let newClass = "winWord";
   newID = newClass + "0";
   //let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
@@ -548,6 +556,7 @@ function winSequence(){
     makeWinWord(words[i], newID, y);
     y += Keysize;
   }
+
 }
 function enterPressed(){
   clearInterval(clickInterval);
