@@ -905,8 +905,8 @@ function closeMenu(){
   document.getElementById("menu").innerHTML = "";
 }
 function setCookie(cname, cvalue) {
-  var d = new Date();
-  d.setHours(24,0,0,0);
+  var d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+  //d.setHours(24,0,0,0);
   let expires = "expires=" + d.toDateString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
