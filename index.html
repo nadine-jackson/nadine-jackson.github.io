@@ -542,9 +542,12 @@ function winSequence(){
   let words = (SentenceBank[parseInt(dd) - 1].toUpperCase()).split(' ');
   words.push("");
   words.push(getCookie("guesses") + " GUESSES");
-  words.push(getCookie("mode") + " MODE");
+  words.push(getCookie("mode").toUpperCase() + " MODE");
+  if (getCookie("hints") != ""){
+    words.push("WITH " + getCookie("hints") + " HINTS");
+  }
   var i = 0;
-  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * 8 / 2;
+  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * (words.length) / 2;
   let newClass = "winWord";
   newID = newClass + "0";
   //let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
@@ -839,6 +842,12 @@ function giveHint(){
     clickLetter(hint.slice(n, n+1));
     n ++;
   }, 100);
+  let hintstr = getCookie("hints");
+  let hintnum = 0;
+  if (hintstr != ""){
+    hintnum = parseInt(hintstr);
+  }
+  setCookie("hints", (hintnum + 1).toString());
 }
 function makeHintButton(active = true){
   let oc = "";
