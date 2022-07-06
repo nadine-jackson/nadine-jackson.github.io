@@ -562,6 +562,7 @@ function winSequence(){
 
 }
 function enterPressed(){
+  if (getCookie("won") != "true"){
   clearInterval(clickInterval);
   let num_guesses_str = getCookie("guesses");
   let num_guesses = 0;
@@ -602,6 +603,9 @@ function enterPressed(){
 }
 else{
   userError();
+}}
+else{
+  playSound(key2);
 }
 }
 
@@ -670,6 +674,7 @@ function clickLetter(c){
   }
 }
 function backPressed(){
+  if (getCookie("won") != "true"){
 if(Guess.length > 0){
   playSound(key2);
   document.getElementById('inputsquares').innerHTML = "";
@@ -678,9 +683,13 @@ if(Guess.length > 0){
 }
 else{
   userError();
+}}
+else{
+  playSound(key2);
 }
 }
 function clickSpace(){
+  if (getCookie("won") != "true"){
   if (Guess.length > 0 && Guess.slice(-1) != " " && Guess.length < (13 * 5 - 7)){
     playSound(key2);
     Guess += " ";
@@ -689,6 +698,9 @@ function clickSpace(){
   }
   else{
     userError();
+  }}
+  else{
+    playSound(key2);
   }
 }
 function enter(event) {
