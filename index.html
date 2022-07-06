@@ -780,14 +780,16 @@ function longestPrev(){
   let prevs = prev_guesses_str.split("-");
   for (let i = 0; i < prevs.length; i++){
     let s = prevs[i];
+    let o = prevs[i];
     while (s.includes("*")){
       s = s.replace("*", "");
+      o = o.replace("*", "");
     }
     while (s.includes(" ")){
       s = s.replace(" ", "");
     }
     if (s.length > longest.length){
-      longest = s;
+      longest = o;
     }
   }
   return longest;
