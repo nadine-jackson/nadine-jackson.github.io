@@ -766,16 +766,20 @@ function redraw(){
   else{
     text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
   }
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prevs = prev_guesses_str.split("-");
   document.getElementById("game").innerHTML = text;
-  if (Prevs.length > 0){
-    Level = parseInt(6 * Keysize * Prevs.length + Height * 0.25);
-    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(Prevs, goalSentence) + "</div>";
+  if (prevs.length > 0){
+    Level = parseInt(6 * Keysize * prevs.length + Height * 0.25);
+    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prevs, goalSentence) + "</div>";
   }
 }
 function longestPrev(){
   let longest = "";
-  for (let i = 0; i < Prevs.length; i++){
-    let s = Prevs[i];
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prevs = prev_guesses_str.split("-");
+  for (let i = 0; i < prevs.length; i++){
+    let s = prevs[i];
     while (s.includes("*")){
       s = s.replace("*", "");
     }
