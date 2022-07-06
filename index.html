@@ -636,6 +636,7 @@ function reset(s){
   makeCursor(y);
 }
 function clickLetter(c){
+  if (getCookie("won") != "true"){
   if (Guess.length < (13 * 5 - 7)){
     playSound(key1);
     if (c == "1"){
@@ -663,6 +664,9 @@ function clickLetter(c){
   }
   else{
     userError;
+  }}
+  else{
+    playSound(key1);
   }
 }
 function backPressed(){
@@ -925,7 +929,7 @@ function makeCloseButton(){
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
   makeHintButton(getCookie("won") != "true");
-  let button_enabled = "won" != "true";
+  let button_enabled = (getCookie("won") != "true");
   makeEasyButton(button_enabled);
   if (getCookie("maxDifficulty") == "Easy"){
     button_enabled = false;
