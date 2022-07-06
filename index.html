@@ -780,16 +780,16 @@ function longestPrev(){
   let prevs = prev_guesses_str.split("-");
   for (let i = 0; i < prevs.length; i++){
     let s = prevs[i];
-    let o = prevs[i];
+    //let o = prevs[i];
     while (s.includes("*")){
       s = s.replace("*", "");
-      o = o.replace("*", "");
+      //o = o.replace("*", "");
     }
-    while (s.includes(" ")){
-      s = s.replace(" ", "");
-    }
+    //while (s.includes(" ")){
+    //  s = s.replace(" ", "");
+    //}
     if (s.length > longest.length){
-      longest = o;
+      longest = s;
     }
   }
   return longest;
@@ -830,7 +830,13 @@ function addHelpfulChar(s){
     ret += goalSentence.slice(inWord[i], inWord[i] + 1);
     i += 1;
   }
-  if (ret.slice(0, 1) == " " || ret.includes("  ")){
+  if (ret.slice(0, 1) == " "){
+    ret = ret.trimStart();
+  }
+  while (ret.includes("  ")){
+    ret = ret.slice(0, ret.indexOf("  ")) + ret.slice(ret.indexOf("  ") + 1);
+  }
+  while (ret == s){
     ret = addHelpfulChar(s);
   }
   return ret;
