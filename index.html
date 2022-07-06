@@ -836,7 +836,7 @@ function addHelpfulChar(s){
   while (ret.includes("  ")){
     ret = ret.slice(0, ret.indexOf("  ")) + ret.slice(ret.indexOf("  ") + 1);
   }
-  while (ret == s){
+  while (update(ret, goalSentence, getCookie("mode")).join("*") == update(s, goalSentence, getCookie("mode")).join("*")){
     ret = addHelpfulChar(s);
   }
   return ret;
