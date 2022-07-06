@@ -168,23 +168,28 @@ function playSound(sound){
     if (sound == key1){
       if (sound.currentTime == 0 || sound.ended){
         sound.load();
+        sound.volume = 0.5;
         sound.play();
       }
       else if (key3.currentTime == 0 || key3.ended){
         key3.load();
+        key3.volume = 0.5;
         key3.play();
       }
       else if (key4.currentTime == 0 || key4.ended){
         key4.load();
+        key4.volume = 0.5;
         key4.play();
       }
       else if (key5.currentTime == 0 || key5.ended){
         key5.load();
+        key5.volume = 0.5;
         key5.play();
       }
     }
     else{
       sound.load();
+      sound.volume = 0.5;
       sound.play();
     }
   }
