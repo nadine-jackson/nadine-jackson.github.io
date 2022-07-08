@@ -785,7 +785,7 @@ function mouseClickLetter(c){
   }
 }
 function redraw(){
-
+  let goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
   document.getElementById("keyboard").innerHTML = "";
   makeAll();
   reset(Guess);
