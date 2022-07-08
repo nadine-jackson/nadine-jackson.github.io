@@ -47,11 +47,17 @@ var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 var key1 = new Audio('./KeyPress1.mp3');
-var key3 = new Audio('./KeyPress1.mp3');
-var key4 = new Audio('./KeyPress1.mp3');
-var key5 = new Audio('./KeyPress1.mp3');
+var key12 = new Audio('./KeyPress1.mp3');
+var key13 = new Audio('./KeyPress1.mp3');
+var key14 = new Audio('./KeyPress1.mp3');
 var key2 = new Audio('./KeyPress2.mp3');
+var key22 = new Audio('./KeyPress2.mp3');
+var key23 = new Audio('./KeyPress2.mp3');
+var key24 = new Audio('./KeyPress2.mp3');
 var doink = new Audio('./doink.mp3');
+var doink2 = new Audio('./doink.mp3');
+var doink3 = new Audio('./doink.mp3');
+var doink4 = new Audio('./doink.mp3');
 var winJingle = new Audio('./winJingle.mp3');
 var SoundOn = true;
 var recentLetter = '4';
@@ -161,36 +167,39 @@ function update(guess, goal, difficulty){
     return updateHard(guess, goal);
   }
 }
+function playOneOf(l){
+  let i = 0;
+  for (i = 0; i < l.length; i++){
+    let sound = l[i];
+    //sound.load();
+    if (sound.currentTime == 0 || sound.ended){
+      if (sound.ended){
+        sound.load();
+      }
+      sound.volume = 0.3;
+      sound.play();
+      return true;
+    }}
+    return false;
+  }
 function playSound(sound){
   if (SoundOn){
     //sound2 = sound.cloneNode();
     //sound2.play();
     if (sound == key1){
-      if (sound.currentTime == 0 || sound.ended){
-        sound.load();
-        sound.volume = 0.3;
-        sound.play();
-      }
-      else if (key3.currentTime == 0 || key3.ended){
-        key3.load();
-        key3.volume = 0.3;
-        key3.play();
-      }
-      else if (key4.currentTime == 0 || key4.ended){
-        key4.load();
-        key4.volume = 0.3;
-        key4.play();
-      }
-      else if (key5.currentTime == 0 || key5.ended){
-        key5.load();
-        key5.volume = 0.3;
-        key5.play();
-      }
+      playOneOf([key1, key12, key13, key14]);
+
     }
-    else{
-      sound.load();
-      sound.volume = 0.3;
-      sound.play();
+    else if (sound == key2){
+      playOneOf([key2, key22, key23, key24]);
+
+    }
+    else if (sound == doink){
+      playOneOf([doink, doink2, doink3, doink4]);
+
+    }
+    else if (sound == winJingle) {
+      playOneOf([winJingle]);
     }
   }
 }
