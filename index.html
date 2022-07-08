@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css"></link>
   <link rel="icon" href="./favicon.ico"></link>
 </head>
-<body id="body" onkeydown="enter(event)" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
+<body id="body" onkeydown="enter(event)" ontouchstart="noClicks()" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
 
 
 
@@ -60,6 +60,7 @@ var doink3 = new Audio('./doink.mp3');
 var doink4 = new Audio('./doink.mp3');
 var winJingle = new Audio('./winJingle.mp3');
 var SoundOn = true;
+var Clicks = true;
 var recentLetter = '4';
 function takeGuess() {
   var x = document.getElementById("frm1");
@@ -186,15 +187,15 @@ function playSound(sound){
   if (SoundOn){
     //sound2 = sound.cloneNode();
     //sound2.play();
-    if (sound == key1){
+    if (sound == key1 && Clicks){
       playOneOf([key1, key12, key13, key14]);
 
     }
-    else if (sound == key2){
+    else if (sound == key2 && Clicks){
       playOneOf([key2, key22, key23, key24]);
 
     }
-    else if (sound == doink){
+    else if (sound == doink && Clicks){
       playOneOf([doink, doink2, doink3, doink4]);
 
     }
@@ -231,6 +232,9 @@ function newXY(x, y, n, lbound = Bound, rbound = Width - Bound){
 function mute(){
   SoundOn = ! SoundOn;
   makeBanner();
+}
+function noClicks(){
+  Clicks = false;
 }
 function makeSound(){
   if (SoundOn){
