@@ -527,6 +527,11 @@ function userError(){
 }
 function makeWinWord(word, id, y){
   //document.getElementById(id).innerHTML = word;
+  if (word == "SHARE"){
+    console.log(id);
+    //document.getElementById(id).onclick = shareResults();
+    document.getElementById(id).style["touch-action"] = "manipulation";
+  }
   let num = id.split("winWord")[1];
   if (num < 5){
   if (num % 2 == 0){
@@ -576,15 +581,22 @@ function winSequence(){
       words.push("WITH " + hints + " HINTS");
     }
   }
+  words.push("SHARE");
+  words.push("");
   var i = 0;
-  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * (words.length) / 2;
+  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * (words.length - 1) / 2;
   let newClass = "winWord";
   newID = newClass + "0";
   //let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
   for (i = 0; i < words.length; i++){
     newID = "winWord" + i.toString();
     //document.getElementById("winScreen").innerHTML += (i).toString();
-    document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\"></div>";
+    if (words[i] == "SHARE"){
+      document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\" onclick='shareResults()'></div>";
+    }
+    else{
+      document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\"></div>";
+    }
     document.getElementById(newID).classList.add(newClass);
     makeWinWord(words[i], newID, y);
     y += Keysize;
@@ -991,7 +1003,6 @@ function setCookie(cname, cvalue) {
   var d = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
   //d.setHours(24,0,0,0);
   let expires = "expires=" + d;
-  console.log(expires);
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
@@ -1021,6 +1032,36 @@ function checkCookie() {
     }
   }
 }
+function shareResults(){
+  let shareSentence = "I solved the ";
+  shareSentence += String(today.getMonth() + 1) + "/" + String(today.getDate());
+  shareSentence += " sentencle in ";
+  let guesses = getCookie("guesses");
+  if (guesses == "1"){
+    shareSentence += (guesses + " guess");
+  }
+  else{
+    shareSentence += (guesses + " guesses");
+  }
+  shareSentence += " on " + getCookie("mode") + " mode";
+  let hints = getCookie("hints");
+  if (hints != ""){
+    if (hints == "1"){
+      shareSentence += ("with " + hints + " hint");
+    }
+    else{
+      shareSentence += ("with " + hints + " hints");
+    }
+  }
+  navigator.clipboard.writeText(shareSentence + ". nadine-jackson.github.io/sentencle");
+  //console.log("why is this happening");
+  document.getElementById("winWord8").innerHTML = "";
+  makeWinWord("COPIED RESULTS", "winWord8", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  makeWinWord("TO CLIPBOARD", "winWord9", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);
+  setTimeout(function(){
+  makeWinWord("SHARE", "winWord8", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  makeWinWord("", "winWord9", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);}, 3000);
+  }
 </script>
 
 </body>
