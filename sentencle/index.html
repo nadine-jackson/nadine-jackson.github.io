@@ -816,7 +816,7 @@ function redraw(){
   reset(Guess);
   document.getElementById("game").innerHTML = "";
   text = prettyPrint("GUESS: " + OldGuess, Keysize);
-  current = update(OldGuess, goalSentence);
+  current = update(OldGuess, goalSentence, getCookie("mode"));
   text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
   if (incomplete(current, goalSentence)){
     text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
