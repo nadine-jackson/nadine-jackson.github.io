@@ -26,6 +26,8 @@
 
 </div>
 
+<div id="rules">
+</div>
 
 <script src="./sentences.txt"></script>
 <script>
@@ -41,7 +43,7 @@ var InputTop = 0;
 var GameTop = 0;
 var OutputTop = 0;
 var Bound = 0;
-var OldGuess = "";
+var OldGuess = "-";
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -435,42 +437,6 @@ function makeAll(){
   }
 }
 
-function prettyPrintVintage(l, g, y0, lbound = Bound, rbound = Width - Bound){
-  ret = "";
-  x = lbound;
-  y = y0;
-  if (l.length == 0){
-    ret += spaceXY(x, y);
-    return ret;
-  }
-
-  beginning = l[0].slice(0, 1) == g.slice(0, 1);
-  ending = l[l.length - 1].slice(-1) == g.slice(-1);
-  if (! beginning){
-    ret += spaceXY(x, y);
-    y = newXY(x, y, 1, lbound, rbound);
-    x = newXY(x, y, 0, lbound, rbound);
-  }
-  for (var i = 0; i < l.length; i++){
-    for (var j = 0; j < (l[i]).length; j++){
-      ret += charXY(x, y, l[i].slice(j, j+1));
-      y = newXY(x, y, 1, lbound, rbound);
-      x = newXY(x, y, 0, lbound, rbound);
-
-    }
-    if (i != l.length - 1){
-      ret += spaceXY(x, y);
-      y = newXY(x, y, 1, lbound, rbound);
-      x = newXY(x, y, 0, lbound, rbound);
-    }
-  }
-  if (! ending){
-    ret += spaceXY(x, y);
-    y = newXY(x, y, 1, lbound, rbound);
-    x = newXY(x, y, 0, lbound, rbound);
-  }
-  return ret;
-}
 function prettyPrint(s, y0, lbound = Bound, rbound = Width - Bound){
   ret = "";
   x = lbound;
@@ -815,14 +781,16 @@ function redraw(){
   makeAll();
   reset(Guess);
   document.getElementById("game").innerHTML = "";
-  text = prettyPrint("GUESS: " + OldGuess, Keysize);
-  current = update(OldGuess, goalSentence, getCookie("mode"));
-  text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
-  if (incomplete(current, goalSentence)){
-    text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
-  }
-  else{
-    text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+  if (OldGuess != "-"){
+    text = prettyPrint("GUESS: " + OldGuess, Keysize);
+    current = update(OldGuess, goalSentence, getCookie("mode"));
+    text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
+    if (incomplete(current, goalSentence)){
+      text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
+    }
+    else{
+      text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+    }
   }
   let prev_guesses_str = getCookie("prev_guesses");
   let prevs = prev_guesses_str.split("-");
@@ -980,6 +948,49 @@ function makeCloseButton(){
   document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
   document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 4 * Keysize + Bound, Bound);
 }
+function closeRules(){
+  document.getElementById('rules').innerHTML = "";
+  document.getElementById('rules').style['height'] = "0px";
+}
+function showRules(){
+  closeMenu()
+  document.getElementById("rules").style['position'] = 'absolute';
+  document.getElementById("rules").style["color"] = '#E5F9E0';
+  document.getElementById("rules").style["text-align"] = 'center';
+  document.getElementById("rules").style["font-family"] = 'monospace,sans-serif';
+  document.getElementById("rules").style['top'] = (Height / 10).toString() + 'px';
+  document.getElementById("rules").style['left'] = ((window.innerWidth - Width) / 2).toString() + 'px';
+  document.getElementById("rules").style['height'] = (Height).toString() + "px";
+  document.getElementById("rules").style['width'] = Width.toString() + "px";
+  document.getElementById("rules").innerHTML = "<div id='rules x' onclick='closeRules()'></div>";
+  //document.getElementById("rules x").onclick = function(){closeRules()};
+  document.getElementById("rules x").innerHTML = prettyPrint("x", 0, Width - Keysize, Width);
+  document.getElementById("rules x").style['height'] = Keysize.toString() + "px";
+  document.getElementById("rules x").style['width'] = Keysize.toString() + "px";
+  document.getElementById("rules x").style['top'] = "0px";
+  document.getElementById("rules x").style['right'] = "0px";
+  document.getElementById("rules").style['background-color'] = "#2F9C95";
+  document.getElementById("rules").style['font-size'] = parseInt(Keysize * 0.8).toString() + "px";
+  let y = Keysize;
+  document.getElementById("rules").innerHTML += "EXAMPLE: THE CORRECT ANSWER IS <br/><br/><br/><br/><br/>";
+  y += Keysize;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN RULES VERY COMPREHENSIVELY.", y);
+  document.getElementById("rules").innerHTML += "AND YOU GUESS<br/><br/><br/><br/><br/>";
+  y += Keysize * 5;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN QUICKLY AND WELL.", y);
+  document.getElementById("rules").innerHTML += "THE BEGINNING OF YOUR GUESS (EVERYTHING BEFORE THE FIRST INCORRECT CHARACTER) IS<br/><br/><br/>";
+  y += Keysize * 6;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN ", y);
+  document.getElementById("rules").innerHTML += "THE GAME WILL PRINT OUT<br/><br/><br/><br/><br/><br/>";
+  y += Keysize * 3;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN *LES *E* *P*E*EN*I*EL*", y);
+  document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS ONE OR MORE LETTERS/PUNCTUATION MARKS THAT ARE MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+}
+function makeRulesButton(){
+  oc = "onclick='showRules()'";
+  document.getElementById("menu").innerHTML += "<div id='rules button' " + oc + "></div>";
+  document.getElementById("rules button").innerHTML = prettyPrint("RULES", 5 * Keysize + Bound, Bound);
+}
 function openMenu(){
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
   makeHintButton(getCookie("won") != "true");
@@ -994,6 +1005,7 @@ function openMenu(){
   }
   makeHardButton(button_enabled);
   makeCloseButton();
+  makeRulesButton();
 }
 function closeMenu(){
   document.getElementById("menu").style["width"] = "0px";
