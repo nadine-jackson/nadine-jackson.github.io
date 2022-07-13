@@ -63,6 +63,8 @@ var doink4 = new Audio('./doink.mp3');
 var winJingle = new Audio('./winJingle.mp3');
 var SoundOn = true;
 var Clicks = true;
+var RulesOpen = false;
+var MenuOpen = false;
 var recentLetter = '4';
 function takeGuess() {
   var x = document.getElementById("frm1");
@@ -160,7 +162,7 @@ function updateEasy(guess, goal) {
   return s.split("*");
 }
 function update(guess, goal, difficulty){
-  if (difficulty == "Easy"){
+  if (difficulty == "easy"){
     return updateEasy(guess, goal);
   }
   else if (difficulty == "medium"){
@@ -434,6 +436,12 @@ function makeAll(){
   }
   if (getCookie("mode") == ""){
     setCookie("mode", "medium");
+  }
+  if (MenuOpen){
+    openMenu();
+  }
+  if (RulesOpen){
+    showRules();
   }
 }
 
@@ -799,6 +807,7 @@ function redraw(){
     Level = parseInt(6 * Keysize * prevs.length + Height * 0.25);
     document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prevs, goalSentence) + "</div>";
   }
+
 }
 function longestPrev(){
   let longest = "";
@@ -900,7 +909,7 @@ function makeHintButton(active = true){
 }
 function makeEasy(){
   closeMenu();
-  setCookie("mode", "Easy");
+  setCookie("mode", "easy");
 }
 function makeEasyButton(active){
   let oc = "";
@@ -949,11 +958,13 @@ function makeCloseButton(){
   document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 4 * Keysize + Bound, Bound);
 }
 function closeRules(){
+  RulesOpen = false;
   document.getElementById('rules').innerHTML = "";
   document.getElementById('rules').style['height'] = "0px";
 }
 function showRules(){
-  closeMenu()
+  closeMenu();
+  RulesOpen = true;
   document.getElementById("rules").style['position'] = 'absolute';
   document.getElementById("rules").style["color"] = '#E5F9E0';
   document.getElementById("rules").style["text-align"] = 'center';
@@ -983,8 +994,17 @@ function showRules(){
   document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN ", y);
   document.getElementById("rules").innerHTML += "THE GAME WILL PRINT OUT<br/><br/><br/><br/><br/><br/>";
   y += Keysize * 3;
-  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN *LES *E* *P*E*EN*I*EL*", y);
-  document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS ONE OR MORE LETTERS/PUNCTUATION MARKS THAT ARE MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+  let mode = getCookie("mode");
+  document.getElementById("rules").innerHTML += prettyPrint((update("I EXPLAIN QUICKLY AND WELL.", "I EXPLAIN RULES VERY COMPREHENSIVELY.", getCookie("mode"))).join("*"), y);
+  if (mode == "medium"){
+    document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS ONE OR MORE LETTERS/PUNCTUATION MARKS THAT ARE MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+  }
+  else if (mode == "easy"){
+    document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS EXACTLY ONE LETTER/PUNCTUATION MARK MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+  }
+  else{
+    document.getElementById("rules").innerHTML += "WHERE THE LETTERS FROM THE BEGINNING OF THE GUESS ARE PLACED IN ORDER IN THE ANSWER.<br/><br/>";
+  }
 }
 function makeRulesButton(){
   oc = "onclick='showRules()'";
@@ -992,11 +1012,12 @@ function makeRulesButton(){
   document.getElementById("rules button").innerHTML = prettyPrint("RULES", 5 * Keysize + Bound, Bound);
 }
 function openMenu(){
+  MenuOpen = true;
   document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
   makeHintButton(getCookie("won") != "true");
   let button_enabled = (getCookie("won") != "true");
   makeEasyButton(button_enabled);
-  if (getCookie("maxDifficulty") == "Easy"){
+  if (getCookie("maxDifficulty") == "easy"){
     button_enabled = false;
   }
   makeMediumButton(button_enabled);
@@ -1008,6 +1029,7 @@ function openMenu(){
   makeRulesButton();
 }
 function closeMenu(){
+  MenuOpen = false;
   document.getElementById("menu").style["width"] = "0px";
   document.getElementById("menu").innerHTML = "";
 }
