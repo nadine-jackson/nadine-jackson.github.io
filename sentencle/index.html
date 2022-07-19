@@ -411,6 +411,7 @@ function makeKeys(){
     let prev_guesses_str = getCookie("prev_guesses");
     let prev_guesses = prev_guesses_str.split("-");
     Level = 6 * Keysize * prev_guesses.length + Height / 4;
+    goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
     if (prev_guesses.length > 0){
       document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
     }
