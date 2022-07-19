@@ -414,6 +414,7 @@ function makeKeys(){
     if (prev_guesses.length > 0){
       document.getElementById("info").innerHTML = prev_guesses[0];//"<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
     }
+    return prev_guesses;
   }
 function makeAll(){
   Width = window.innerWidth;
@@ -610,7 +611,7 @@ function enterPressed(){
     setCookie("won", "true");
     winSequence();
   }
-  makeInfo();
+  prev_guesses = makeInfo();
   if (! prev_guesses.includes(current.join("*")) && "*" != current.join("*")){
     prev_guesses.push(current.join("*"));
     setCookie("prev_guesses", prev_guesses.join("-"));
