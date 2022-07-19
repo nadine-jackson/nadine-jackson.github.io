@@ -412,7 +412,7 @@ function makeKeys(){
     let prev_guesses = prev_guesses_str.split("-");
     Level = 6 * Keysize * prev_guesses.length + Height / 4;
     if (prev_guesses.length > 0){
-      document.getElementById("info").innerHTML = prev_guesses_str;//"<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
+      document.getElementById("info").innerHTML = prev_guesses[0];//"<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
     }
   }
 function makeAll(){
