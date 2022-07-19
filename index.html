@@ -2,10 +2,1105 @@
 <html>
 
 <head>
-  <title>Nadine's Github</title>
+  <title>Sentencle Demo</title>
+  <link rel="stylesheet" href="style.css"></link>
+  <link rel="icon" href="./favicon.ico"></link>
 </head>
-<body>
-  <a href="./sentencle">Play Sentencle</a>
-  </body>
+<body id="body" onkeydown="enter(event)" ontouchstart="noClicks()" onLoad="makeAll()" onkeyup="releaseKey(event)" onresize="redraw()">
 
+
+
+<div id="inputsquares">
+</div>
+
+<div id="game">
+</div>
+<div id="info">
+</div>
+<div id="winScreen">
+</div>
+<div id="keyboard">
+</div>
+<div id="banner"></div>
+<div id="menu">
+
+</div>
+
+<div id="rules">
+</div>
+
+<script src="./sentences.txt"></script>
+<script>
+var Guess = "";
+var Prev = "";
+var Prevs = []
+var Level = 0;
+var Cursor = 20;
+var Keysize = 20;
+var Width = 0;
+var Height = 0;
+var InputTop = 0;
+var GameTop = 0;
+var OutputTop = 0;
+var Bound = 0;
+var OldGuess = "-";
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+var key1 = new Audio('./KeyPress1.mp3');
+var key12 = new Audio('./KeyPress1.mp3');
+var key13 = new Audio('./KeyPress1.mp3');
+var key14 = new Audio('./KeyPress1.mp3');
+var key2 = new Audio('./KeyPress2.mp3');
+var key22 = new Audio('./KeyPress2.mp3');
+var key23 = new Audio('./KeyPress2.mp3');
+var key24 = new Audio('./KeyPress2.mp3');
+var doink = new Audio('./doink.mp3');
+var doink2 = new Audio('./doink.mp3');
+var doink3 = new Audio('./doink.mp3');
+var doink4 = new Audio('./doink.mp3');
+var winJingle = new Audio('./winJingle.mp3');
+var SoundOn = true;
+var Clicks = true;
+var RulesOpen = false;
+var MenuOpen = false;
+var recentLetter = '4';
+function takeGuess() {
+  var x = document.getElementById("frm1");
+  var text = "";
+  var i;
+  for (i = 0; i < x.length ;i++) {
+    text += x.elements[i].value + "<br>";
+  }
+  return text;
+}
+var clickInterval;
+function darkLetter(c){
+  document.getElementById("key" + c).style["background-color"] = "DarkSlateGray";
+  document.getElementById("key" + c).style["color"] = "#E5F9E0";
+}
+function lightLetter(c){
+  if (c == "3"){
+  document.getElementById("key" + c).style["background-color"] = "#A3F7B5";
+  document.getElementById("key" + c).style["color"] = "DarkSlateGray";
+}
+else{
+  document.getElementById("key" + c).style["background-color"] = "#035E7B";
+}
+}
+function updateHard(guess, goal) {
+  guess = guess.toUpperCase();
+  streak = false;
+  l = [];
+  if (guess.slice(0, 1) != goal.slice(0, 1)){
+    l.push("");
+  }
+  while ((guess.length > 0) && goal.includes(guess.charAt(0)))
+  {
+      while (goal.charAt(0) != guess.charAt(0)){
+          streak = false;
+          goal = goal.slice(1);
+        }
+
+      if (streak){
+          last = l.pop();
+          l.push(last + guess.charAt(0));
+        }
+      else{
+          l.push(guess.slice(0, 1));
+        }
+      streak = true;
+      guess = guess.slice(1);
+      goal = goal.slice(1);
+      //guess =;
+    }
+    if (guess.slice(-1) != goal.slice(-1)){
+      l.push("");
+    }
+  return l;
+  //return ["HELLO WORLD."]
+}
+function updateMedium(guess, goal) {
+  let i = 0;
+  while (i < guess.length && goal.includes(guess.slice(i, i+1))){
+    i += 1;
+  }
+  let letterbank = guess.slice(0, i) + " ";
+  let s = "";
+  for (i = 0; i < goal.length; i++){
+    //return goal.split(" ");
+    if (letterbank.includes(goal.slice(i, i+1))){
+
+      s += goal.charAt(i);
+    }
+    else{
+      if (s.slice(-1) != "*"){
+        s += "*";
+      }
+    }
+  }
+  return s.split("*");
+}
+
+function updateEasy(guess, goal) {
+  let i = 0;
+  while (i < guess.length && goal.includes(guess.slice(i, i+1))){
+    i += 1;
+  }
+  let letterbank = guess.slice(0, i) + " ";
+  let s = "";
+  for (i = 0; i < goal.length; i++){
+    //return goal.split(" ");
+    if (letterbank.includes(goal.slice(i, i+1))){
+      s += goal.charAt(i);
+    }
+    else{
+        s += "*";
+    }
+  }
+  return s.split("*");
+}
+function update(guess, goal, difficulty){
+  if (difficulty == "easy"){
+    return updateEasy(guess, goal);
+  }
+  else if (difficulty == "medium"){
+    return updateMedium(guess, goal);
+  }
+  else{
+    return updateHard(guess, goal);
+  }
+}
+function playOneOf(l){
+  let i = 0;
+  for (i = 0; i < l.length; i++){
+    let sound = l[i];
+    //sound.load();
+    if (sound.currentTime == 0 || sound.ended){
+      if (sound.ended){
+        sound.load();
+      }
+      sound.volume = 0.3;
+      sound.play();
+      return true;
+    }}
+    return false;
+  }
+function playSound(sound){
+  if (SoundOn){
+    //sound2 = sound.cloneNode();
+    //sound2.play();
+    if (sound == key1 && Clicks){
+      playOneOf([key1, key12, key13, key14]);
+
+    }
+    else if (sound == key2 && Clicks){
+      playOneOf([key2, key22, key23, key24]);
+
+    }
+    else if (sound == doink && Clicks){
+      playOneOf([doink, doink2, doink3, doink4]);
+
+    }
+    else if (sound == winJingle) {
+      playOneOf([winJingle]);
+    }
+  }
+}
+
+  function updateGuess(key){
+    Guess += "A";
+  }
+
+  function charXY(x, y, c){
+    return "<div id=\"character\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString()+ "px;\nheight: " + Keysize.toString() + "px;\nfont-size: " + parseInt(Keysize * 0.8).toString() + "px;\">" + c + "</div>";
+  }
+  function spaceXY(x, y){
+    return "<div id=\"spacer\" style=\"position: absolute;\nleft: " + x.toString() + "px;\ntop: " + y.toString() + "px;\nwidth: " + Keysize.toString() + "px;\nheight: " + Keysize.toString() + "px;\nfont-size: " + parseInt(Keysize * 0.8).toString() + "px;\">*</div>";
+  }
+
+function newXY(x, y, n, lbound = Bound, rbound = Width - Bound){
+  if (x <= rbound - Keysize * 2){
+    x += Keysize;
+  }
+  else{
+    x = lbound;
+    y += Keysize;
+  }
+  if (n == 0){
+    return x;
+  }
+  return y;
+}
+function mute(){
+  SoundOn = ! SoundOn;
+  makeBanner();
+}
+function noClicks(){
+  Clicks = false;
+}
+function makeSound(){
+  if (SoundOn){
+    document.getElementById("banner").innerHTML = "<img id=\"sound\" src=\"./sound_on.png\" onclick=\"mute()\" alt=\"Sound on Symbol\"></img>";
+  }
+  else{
+    document.getElementById("banner").innerHTML = "<img id=\"sound\" src=\"./sound_off.png\" onclick=\"mute()\" alt=\"Sound off Symbol\"></img>";
+  }
+  document.getElementById("sound").style["height"] = "50%";
+  document.getElementById("sound").style["position"] = "absolute";
+  document.getElementById("sound").style["top"] = "25%";
+  document.getElementById("sound").style["right"] = InputTop / 4 + "px";
+}
+function makeLine(n, y){
+  document.getElementById("menu-button").innerHTML += "<div class='line' id='line" + n.toString() +  "'></div>";
+  height = 20;
+  width = 100;
+  //top = y;
+  left = 5;
+  document.getElementById("line" + n.toString()).style['height'] = height.toString() + "%";
+  document.getElementById("line" + n.toString()).style['width'] = width.toString() + "%";
+  document.getElementById("line" + n.toString()).style['top'] = (y).toString() + "%";
+  document.getElementById("line" + n.toString()).style['left'] = left.toString() + "%";
+  document.getElementById("line" + n.toString()).style['border-radius'] =  (Keysize / 10).toString() + "px";
+}
+function makeMenu(){
+  document.getElementById("banner").innerHTML += "<div id='menu-button' onclick='openMenu()'></div>";
+  makeLine(1, 0);
+  makeLine(2, 40);
+  makeLine(3, 80);
+  document.getElementById("menu-button").style['position'] = "absolute";
+  document.getElementById("menu-button").style['height'] = (InputTop / 2).toString() + "px";
+  document.getElementById("menu-button").style['width'] = (InputTop / 2).toString() + "px";
+  document.getElementById("menu-button").style['top'] = (InputTop / 4).toString() + "px";
+  document.getElementById("menu-button").style['left'] = (InputTop / 4).toString() + "px";
+  //document.getElementById("menu-button").style['background-color'] = "Red";
+  document.getElementById("menu").style['height'] = (Height * 3 / 4).toString() + "px";
+  document.getElementById("menu").style['width'] = "0px";//(Width * 3 / 4).toString() + "px";
+  document.getElementById('menu').style['left'] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+}
+function makeBanner(){
+  document.getElementById("banner").style["height"] = (InputTop).toString() + "px";
+  document.getElementById("banner").style["width"] = (Width).toString() + "px";
+  document.getElementById("banner").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+  makeSound();
+  y0 = (InputTop - Keysize) / 2;
+  lbound = (Width - Keysize * "SENTENCLE".length) / 2;
+  document.getElementById("banner").innerHTML += prettyPrint("SENTENCLE", y0, lbound);
+  makeMenu();
+}
+function moveCursor(y = Bound){
+  document.getElementById("cursor").style["left"] = (Cursor).toString() + "px";
+  document.getElementById("cursor").style["top"] = (y).toString() + "px";
+}
+function makeCursor(y = Bound){
+  c = "<div id='cursor'></div>";
+  document.getElementById("inputsquares").innerHTML += c;
+  document.getElementById("cursor").classList.add("stop-flashing-red");
+  document.getElementById("cursor").style["height"] = (Keysize).toString() + "px";
+  document.getElementById("cursor").style["width"] = (Keysize / 10).toString() + "px";
+  moveCursor(y);
+}
+function makeInput(){
+  document.getElementById("inputsquares").style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
+  document.getElementById("inputsquares").style["width"] = (Width).toString() + "px";
+  document.getElementById("inputsquares").style["top"] = (InputTop).toString() + "px";
+  document.getElementById("inputsquares").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+  //document.getElementById("cursor").style["height"] = (100).toString() + "px";
+  makeCursor();
+}
+function makeGame(){
+  document.getElementById("game").style["height"] = (Height/2).toString() + "px";
+  document.getElementById("game").style["width"] = (Width).toString() + "px";
+  document.getElementById("game").style["top"] = (GameTop).toString() + "px";
+  document.getElementById("game").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+}
+function makeKey(c, x, y, w=Keysize, h=Keysize){
+  keyID = "key" + c;
+  md = " onmousedown=\"mouseClickLetter('" + c + "')\"";
+  //if (c == " "){
+    //md = " onmousedown=\"clickSpace()\"";
+  //}
+  mov = " onmouseover=\"mouseDarkLetter('" + c + "')\"";
+  mo = " onmouseout=\"lightLetter('" + c + "')\"";
+  ts = " ontouchstart=\"mobileDarkLetter('" + c + "')\"";
+  te = " ontouchend=\"mobileClickLetter('" + c + "')\"";
+  if (c == "1"){
+    c = "'";
+  }
+  else if (c == "2"){
+    c = "<";
+  }
+  if (c == "3"){
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + "Enter" +  "</div>";
+    document.getElementById(keyID).style["background-color"] = "#A3F7B5";
+    document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.5)).toString() + "px";
+    document.getElementById(keyID).style["color"] = "DarkSlateGray";
+  }
+  else{
+    document.getElementById("keyboard").innerHTML += "<div id=\"" + keyID + "\" " + md + mo + mov + ts + te + ">" + c +  "</div>";
+    document.getElementById(keyID).style["background-color"] = "#035E7B";
+    document.getElementById(keyID).style["font-size"] = (parseInt(h * 0.8)).toString() + "px";
+    document.getElementById(keyID).style["color"] = "#E5F9E0";
+  }
+  document.getElementById(keyID).addEventListener('touchend', event => {
+    event.preventDefault();
+  });
+  document.getElementById(keyID).style["text-align"] = "center";
+  document.getElementById(keyID).style["user-select"] = "none";
+  document.getElementById(keyID).style["font-family"] = "monospace,sans-serif";
+  document.getElementById(keyID).style["width"] = w.toString() + "px";
+  document.getElementById(keyID).style["height"] = h.toString() + "px";
+  document.getElementById(keyID).style["border-radius"] = h/10 + "px";
+  document.getElementById(keyID).style["position"] = "absolute";
+  document.getElementById(keyID).style["left"] = x.toString() + "px";
+  document.getElementById(keyID).style["top"] = y.toString() + "px";
+  document.getElementById(keyID).style["touch-action"] = "manipulation";
+}
+function makeKeys(){
+
+
+  //document.getElementById("banner").innerHTML = dd + "/" + mm + "/" + yyyy;
+  board = ["?.!", "QWERTYUIOP", "ASDFGHJKL,", "ZXCVBNM1"];
+  kbh = Height/4;
+  document.getElementById("keyboard").style["height"] = (kbh).toString() + "px";
+  document.getElementById("keyboard").style["width"] = (Width).toString() + "px";
+  document.getElementById("keyboard").style["bottom"] = "0px";//(Height).toString() + "px";
+  document.getElementById("keyboard").style["left"] = ((window.innerWidth / 2) - (Width / 2)).toString() + "px";
+
+  keyWidth = parseInt(Width / 10);
+  keyHeight = parseInt(kbh / 5);
+  keyWidth = parseInt(keyWidth * parseFloat(10.0 / 11));
+  vspaceSize = keyHeight / 10;
+  spaceSize = keyWidth / 10;
+  x = (Width - 10 * keyWidth - 9 * spaceSize) / 2 + 7 * (keyWidth + spaceSize);
+
+  //background-color: #2F9C95;
+  y = (kbh - (4 * keyHeight + 3 * spaceSize)) / 2 - (keyHeight + spaceSize);
+  document.getElementById("keyboard").innerHTML += "<div id='punc'></div>";
+  document.getElementById("punc").style["height"] = (keyHeight + spaceSize).toString() + "px";
+  document.getElementById("punc").style["width"] = ((Width - 10 * keyWidth - 9 * spaceSize) + 3 * keyWidth + 2* spaceSize).toString() + "px";
+  document.getElementById("punc").style["position"] = "absolute";
+  document.getElementById("punc").style["top"] = (0 - (keyHeight + spaceSize)).toString() + "px";
+  document.getElementById("punc").style["right"] = (0).toString() + "px";
+  document.getElementById("punc").style["background-color"] = "#2F9C95";
+  //document.getElementById("keyboard").style["height"] = 300 + "px";
+  for (var i = 0; i < board.length; i++){
+    for (var j = 0; j < board[i].length; j++){
+      c = board[i].slice(j, j+1);
+      makeKey(c, x, y, keyWidth, keyHeight);
+      x += keyWidth + spaceSize;
+    }
+    x = (Width - 10 * keyWidth - 9 * spaceSize) / 2;
+    y += keyHeight + keyHeight / 10;
+  }
+  x = (Width - 10 * keyWidth - 9 * spaceSize) / 2;//space
+  c = " ";
+  makeKey(c, x, y, 7 * spaceSize + 8 * keyWidth, keyHeight);
+  c = "2";//back
+  x = (Width - 10 * keyWidth - 9 * spaceSize) / 2 + 8 * spaceSize + 8 * keyWidth;
+  makeKey(c, x, y, 1 * spaceSize + 2 * keyWidth, keyHeight);
+  //c = "1";//quote
+  //x = parseInt(Keysize * 0.9) + 8 * spaceSize;
+  //y = parseInt(Keysize * 0.9) + 2 * spaceSize;
+  //makeKey(c, x, y, Keysize, Keysize);
+  c = "3";//enter
+  //x = (Width - 11 * keyWidth - 10 * spaceSize) / 2 + 9 * keyWidth + 9 * spaceSize;
+  y = (kbh - (4 * keyHeight + 3 * spaceSize)) / 2 + 2 * keyHeight + 2 * spaceSize;
+  makeKey(c, x, y, keyWidth * 2 + spaceSize, keyHeight);
+  }
+  function makeInfo(){
+    let prev_guesses_str = getCookie("prev_guesses");
+    let prev_guesses = prev_guesses_str.split("-");
+    Level = 6 * Keysize * prev_guesses.length + Height / 4;
+    if (prev_guesses.length > 0){
+      document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
+    }
+  }
+function makeAll(){
+  Width = window.innerWidth;
+  Height = window.innerHeight;
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prev_guesses = prev_guesses_str.split("-");
+  Level = 6 * Keysize * prev_guesses.length + Height / 4;
+  if (Height / parseFloat(Width) > 1.7787){
+    Height = parseInt(1.7787 * Width);
+  }
+  else {
+    Width = parseInt(Height / 1.7787);
+  }
+  InputTop = Height / 10;
+  OutputTop = Height * 3 / 4;
+  GameTop = Height / 4;
+  Keysize = Width / 15;
+  Bound = (Width - 13 * Keysize - 1) / 2;
+  Cursor = Bound;
+  makeInput();
+  makeGame();
+  makeBanner();
+  makeKeys();
+  makeInfo();
+  if (getCookie("won") == "true"){
+    winSequence();
+  }
+  if (getCookie("mode") == ""){
+    setCookie("mode", "medium");
+  }
+  if (MenuOpen){
+    openMenu();
+  }
+  if (RulesOpen){
+    showRules();
+  }
+}
+
+function prettyPrint(s, y0, lbound = Bound, rbound = Width - Bound){
+  ret = "";
+  x = lbound;
+  y = y0;
+  //s = l.join("*");
+  for (var i = 0; i < s.length; i++){
+    if (s.slice(i, i+1) == "*"){
+      ret += spaceXY(x, y, s.slice(i, i+1));
+    }
+    else {
+      ret += charXY(x, y, s.slice(i, i+1));
+    }
+      y = newXY(x, y, 1, lbound, rbound);
+      x = newXY(x, y, 0, lbound, rbound);
+
+  }
+  return ret;
+}
+function testPrint(l){
+  ret = "";
+  for (i = 0; i < l.length; i++){
+    for (j = 0; j < l[i].length; j++){
+      ret += l[i][j] + "/";
+    }
+    ret += "<br/>";
+  }
+  return ret;
+}
+function printAll(l, goalSentence){
+  y = Keysize;
+  ret = "";
+  for (i = l.length - 1; i >= 0; i--){
+    s = l[i];
+    ret += prettyPrint(s, y);
+    y += Keysize * 2;
+  }
+  return ret;
+}
+function incomplete(l, g){
+    return ((! (l.length == 1)) || (! (l[0] === g)));
+  }
+window.addEventListener('keydown', (e) => {
+  if (e.keyCode === 32 && e.target === document.body) {
+    e.preventDefault();
+  }
+});
+function userError(){
+  playSound(doink);
+  list = document.getElementById("cursor").classList;
+  list.remove("stop-flashing-red");
+  list.remove("flash-red");
+  void document.getElementById("cursor").offsetWidth;
+  list.add("flash-red");
+}
+function makeWinWord(word, id, y){
+  //document.getElementById(id).innerHTML = word;
+  if (word == "SHARE"){
+    //console.log(id);
+    //document.getElementById(id).onclick = shareResults();
+    document.getElementById(id).style["touch-action"] = "manipulation";
+  }
+  let num = id.split("winWord")[1];
+  if (num < 5){
+  if (num % 2 == 0){
+    document.getElementById(id).style['left'] = "0px";
+    document.getElementById(id).style['animation-name'] = "slide-left";
+  }
+  else{
+    document.getElementById(id).style['left'] = Width.toString() + "px";
+    document.getElementById(id).style['animation-name'] = "slide-right";
+    document.getElementById(id).style['transform'] = "translate(-100%, 0)";
+  }}
+  else{
+    document.getElementById(id).style['left'] = (Width / 2).toString() + "px";
+    document.getElementById(id).style['transform'] = "translate(-50%, 0)";
+    document.getElementById(id).style['animation-name'] = "fade-in";
+    num -= 1;
+  }
+  document.getElementById(id).style['height'] = Keysize.toString() + "px";
+  document.getElementById(id).style['width'] = (Keysize * word.length).toString() + "px";
+  document.getElementById(id).style['top'] = (y).toString() + "px";
+  document.getElementById(id).style['background-color'] = "#035E7B";
+  document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
+  document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, (Keysize * word.length + 1));//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
+}
+function winSequence(){
+  playSound(winJingle);
+  document.getElementById("winScreen").style['height'] = (Height * 3 / 4 - InputTop).toString() + "px";
+  document.getElementById("winScreen").style['top'] = (InputTop).toString() + "px";
+  document.getElementById("winScreen").style['left'] = (window.innerWidth / 2 - Width / 2).toString() + "px";
+  document.getElementById("winScreen").style['width'] = (Width).toString() + "px";
+  let words = (SentenceBank[parseInt(dd) - 1].toUpperCase()).split(' ');
+  words.push("");
+  let guesses = getCookie("guesses");
+  if (guesses == "1"){
+    words.push(guesses + " GUESS");
+  }
+  else{
+    words.push(guesses + " GUESSES");
+  }
+  words.push(getCookie("mode").toUpperCase() + " MODE");
+  let hints = getCookie("hints");
+  if (hints != ""){
+    if (hints == "1"){
+      words.push("WITH " + hints + " HINT");
+    }
+    else{
+      words.push("WITH " + hints + " HINTS");
+    }
+  }
+  words.push("SHARE");
+  words.push("");
+  var i = 0;
+  var y = (Height * 3 / 4 - InputTop) / 2 - Keysize * (words.length - 1) / 2;
+  let newClass = "winWord";
+  newID = newClass + "0";
+  //let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
+  for (i = 0; i < words.length; i++){
+    newID = "winWord" + i.toString();
+    //document.getElementById("winScreen").innerHTML += (i).toString();
+    if (words[i] == "SHARE"){
+      document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\" onclick='shareResults()'></div>";
+    }
+    else{
+      document.getElementById("winScreen").innerHTML += "<div id=\"" + newID + "\"></div>";
+    }
+    document.getElementById(newID).classList.add(newClass);
+    makeWinWord(words[i], newID, y);
+    y += Keysize;
+  }
+
+}
+function enterPressed(){
+  if (getCookie("won") != "true"){
+  clearInterval(clickInterval);
+  let num_guesses_str = getCookie("guesses");
+  let num_guesses = 0;
+  if (num_guesses_str != ""){
+    num_guesses = parseInt(num_guesses_str);
+  }
+  //setCookie("guesses", (num_guesses + 1).toString());
+  if (Guess.length > 0){
+  playSound(key2);
+  setCookie("guesses", (num_guesses + 1).toString());
+  setCookie("maxDifficulty", getCookie("mode"));
+  goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  OldGuess = Guess;
+  current = update(OldGuess, goalSentence, getCookie("mode"));
+  text = prettyPrint("GUESS: " + OldGuess, Bound);
+  text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
+  if (incomplete(current, goalSentence)){
+    text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
+  }
+  else{
+    text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+    setCookie("won", "true");
+    winSequence();
+  }
+  makeInfo();
+  if (! prev_guesses.includes(current.join("*")) && "*" != current.join("*")){
+    prev_guesses.push(current.join("*"));
+    setCookie("prev_guesses", prev_guesses.join("-"));
+  }
+  document.getElementById("game").innerHTML = text;
+  Guess = "";
+  reset("");
+}
+else{
+  userError();
+}}
+else{
+  playSound(key2);
+}
+}
+
+function reset(s){
+  Cursor = Bound;
+  y = Bound;
+  document.getElementById('inputsquares').style["height"] = (Height / 4 - Height / 10 + 13).toString() + "px";
+  document.getElementById('inputsquares').innerHTML = "";
+  GameTop = Height / 4;
+  document.getElementById('game').style["top"] = (GameTop).toString() + "px";
+  document.getElementById('game').style["height"] = (Height / 2).toString() + "px";
+  for (i = 0; i < s.length; i++){
+    c = s[i];
+    if (c == " ") {
+      y = newXY(Cursor, y, 1, Bound, Width - Bound);
+      Cursor = newXY(Cursor, y, 0, Bound, Width - Bound);
+    }
+    else{
+      //document.getElementById('userinput').value += x;
+      document.getElementById('inputsquares').innerHTML += charXY(Cursor, y, c);
+
+      y = newXY(Cursor, y, 1, Bound, Width - Bound);
+      if (y > GameTop - InputTop - Bound - Keysize){
+        document.getElementById('inputsquares').style["height"] = (GameTop - InputTop + Bound * 2 + Keysize).toString() + "px";
+        GameTop += Keysize;
+        document.getElementById('game').style["top"] = (GameTop).toString() + "px";
+        document.getElementById('game').style["height"] = (OutputTop - GameTop).toString() + "px";
+      }
+      Cursor = newXY(Cursor, y, 0, Bound, Width - Bound);
+    }
+  }
+  makeCursor(y);
+}
+function clickLetter(c){
+  if (getCookie("won") != "true"){
+  if (Guess.length < (13 * 5 - 7)){
+    playSound(key1);
+    if (c == "1"){
+      Guess += "'";
+      document.getElementById('inputsquares').innerHTML = "";
+      reset(Guess);
+
+      Cursor += 20;
+    }
+    else if (c == " "){
+      clickSpace();
+    }
+    else if (c == "2"){
+      backPressed();
+    }
+    else if (c == "3"){
+      enterPressed();
+    }
+    else{
+      Guess += c.toUpperCase();
+      //document.getElementById('userinput').value += x;
+      document.getElementById('inputsquares').innerHTML = "";
+      reset(Guess);
+    }
+  }
+  else{
+    userError;
+  }}
+  else{
+    playSound(key1);
+  }
+}
+function backPressed(){
+  if (getCookie("won") != "true"){
+if(Guess.length > 0){
+  playSound(key2);
+  document.getElementById('inputsquares').innerHTML = "";
+  Guess = Guess.slice(0, Guess.length - 1);
+  reset(Guess);
+}
+else{
+  userError();
+}}
+else{
+  playSound(key2);
+}
+}
+function clickSpace(){
+  if (getCookie("won") != "true"){
+  if (Guess.length > 0 && Guess.slice(-1) != " " && Guess.length < (13 * 5 - 7)){
+    playSound(key2);
+    Guess += " ";
+    //Cursor += 20;
+    reset(Guess);
+  }
+  else{
+    userError();
+  }}
+  else{
+    playSound(key2);
+  }
+}
+function enter(event) {
+  var x = event.key;
+  if (x != "1"){
+  if (x == "'"){
+    playSound(key1);
+    x = "1";
+  }
+  if (x == "Enter") {
+    enterPressed();
+  }
+  else if (x == "Backspace"){
+    darkLetter("2");
+    backPressed();
+  }
+  else if (x == " ") {
+    darkLetter(" ");
+    clickSpace();
+  }
+  else if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!1".includes(x) && Guess.length < (13 * 5 - 7)){
+    darkLetter(x.toUpperCase());
+    clickLetter(x);
+  }
+  else if (Guess.length >= (13 * 5 - 7)){
+    userError();
+  }
+}
+}
+function releaseKey(event) {
+  var x = event.key;
+  if (x == "'"){
+    x = "1";
+  }
+  if (x == "Backspace"){
+    x = "2";
+  }
+  // If the pressed keyboard button is "a" or "A" (using caps lock or shift), alert some text.
+  if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.,?!12 ".includes(x)){
+    lightLetter(x.toUpperCase());
+    //document.getElementById('userinput').value += x;
+  }
+}
+function mobileDarkLetter(c){
+  darkLetter(c);
+  recentLetter = c;
+}
+function mouseDarkLetter(c){
+  if (recentLetter != c){
+  darkLetter(c);
+}
+}
+function mobileClickLetter(c){
+  //if (SoundOn){mute();}
+  clickLetter(c);
+  lightLetter(c);
+}
+function mouseClickLetter(c){
+  if (recentLetter != c){
+  clickLetter(c);
+  //document.getElementById("banner").style["background-color"] = "Red";
+  }
+  else{
+    recentLetter = "4";
+  }
+}
+function redraw(){
+  let goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  document.getElementById("keyboard").innerHTML = "";
+  makeAll();
+  reset(Guess);
+  document.getElementById("game").innerHTML = "";
+  if (OldGuess != "-"){
+    text = prettyPrint("GUESS: " + OldGuess, Keysize);
+    current = update(OldGuess, goalSentence, getCookie("mode"));
+    text += prettyPrint(current.join("*"), parseInt(Height * 0.23));
+    if (incomplete(current, goalSentence)){
+      text += prettyPrint("TRY AGAIN", parseInt(Height * 0.43));
+    }
+    else{
+      text += prettyPrint("YOU WON!", parseInt(Height * 0.43));
+    }
+  }
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prevs = prev_guesses_str.split("-");
+  document.getElementById("game").innerHTML = text;
+  if (prevs.length > 0){
+    Level = parseInt(6 * Keysize * prevs.length + Height * 0.25);
+    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ parseInt(window.innerWidth / 2 - Width / 2) +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prevs, goalSentence) + "</div>";
+  }
+
+}
+function longestPrev(){
+  let longest = "";
+  let prev_guesses_str = getCookie("prev_guesses");
+  let prevs = prev_guesses_str.split("-");
+  for (let i = 0; i < prevs.length; i++){
+    let s = prevs[i];
+    //let o = prevs[i];
+    while (s.includes("*")){
+      s = s.replace("*", "");
+      //o = o.replace("*", "");
+    }
+    //while (s.includes(" ")){
+    //  s = s.replace(" ", "");
+    //}
+    if (s.length > longest.length){
+      longest = s;
+    }
+  }
+  return longest;
+}
+function addHelpfulChar(s){
+  let goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  if (s.length >= goalSentence.length){
+    return goalSentence;
+  }
+  let l = [];
+  let inWord = [];
+  let sCopy = s.slice(0);
+  let i = 0;
+
+  while (goalSentence.length > 0){
+    if (sCopy == "" ||  sCopy.slice(0, 1) != goalSentence.slice(0, 1)){
+      l.push(i);
+    }
+    else{
+      inWord.push(i);
+      sCopy = sCopy.slice(1);
+    }
+    goalSentence = goalSentence.slice(1);
+    i += 1;
+  }
+
+  let newCharIndex = Math.floor(Math.random() * l.length);
+  let ret = "";
+
+  i = 0;
+  goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+  while (inWord[i] < l[newCharIndex]){
+    ret += goalSentence.slice(inWord[i], inWord[i] + 1);
+    i += 1;
+  }
+  ret += goalSentence[l[newCharIndex]];
+  while (i < inWord.length){
+    ret += goalSentence.slice(inWord[i], inWord[i] + 1);
+    i += 1;
+  }
+  if (ret.slice(0, 1) == " "){
+    ret = ret.trimStart();
+  }
+  while (ret.includes("  ")){
+    ret = ret.slice(0, ret.indexOf("  ")) + ret.slice(ret.indexOf("  ") + 1);
+  }
+  while (update(ret, goalSentence, getCookie("mode")).join("*") == update(s, goalSentence, getCookie("mode")).join("*")){
+    ret = addHelpfulChar(s);
+  }
+  return ret;
+}
+function betterGuess(){
+  let bestGuess = longestPrev();
+  bestGuess = addHelpfulChar(bestGuess);
+  return bestGuess + "3";
+}
+function giveHint(){
+  closeMenu();
+  let n = 0;
+  let hint = betterGuess();
+  clickInterval = setInterval(function () {
+    clickLetter(hint.slice(n, n+1));
+    n ++;
+  }, 100);
+  let hintstr = getCookie("hints");
+  let hintnum = 0;
+  if (hintstr != ""){
+    hintnum = parseInt(hintstr);
+  }
+  setCookie("hints", (hintnum + 1).toString());
+}
+function makeHintButton(active = true){
+  let oc = "";
+  if (active){
+    oc = "onclick='giveHint()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='hint button' " + oc + "></div>";
+  document.getElementById("hint button").innerHTML = prettyPrint("HINT", Bound, Bound);
+  if (! active){
+    document.getElementById("hint button").style['opacity'] = "0.5";
+  }
+}
+function makeEasy(){
+  closeMenu();
+  setCookie("mode", "easy");
+}
+function makeEasyButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeEasy()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='easy button' " + oc + "></div>";
+  document.getElementById("easy button").innerHTML = prettyPrint("EASY", Bound + Keysize, Bound);
+  if (! active){
+    document.getElementById("easy button").style['opacity'] = "0.5";
+  }
+}
+function makeMedium(){
+  closeMenu();
+  setCookie("mode", "medium");
+}
+function makeMediumButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeMedium()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='medium button' " + oc + "></div>";
+  document.getElementById("medium button").innerHTML = prettyPrint("MEDIUM", Bound + 2 * Keysize, Bound);
+  if (! active){
+    document.getElementById("medium button").style['opacity'] = "0.5";
+  }
+}
+function makeHard(){
+  closeMenu();
+  setCookie("mode", "hard");
+}
+function makeHardButton(active){
+  let oc = "";
+  if (active){
+    oc = "onclick='makeHard()'";
+  }
+  document.getElementById("menu").innerHTML += "<div id='hard button' " + oc + "></div>";
+  document.getElementById("hard button").innerHTML = prettyPrint("HARD", Bound + 3 * Keysize, Bound);
+  if (! active){
+    document.getElementById("hard button").style['opacity'] = "0.5";
+  }
+}
+function makeCloseButton(){
+  oc = "onclick='closeMenu()'";
+  document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
+  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 4 * Keysize + Bound, Bound);
+}
+function closeRules(){
+  RulesOpen = false;
+  document.getElementById('rules').innerHTML = "";
+  document.getElementById('rules').style['height'] = "0px";
+}
+function showRules(){
+  closeMenu();
+  RulesOpen = true;
+  document.getElementById("rules").style['position'] = 'absolute';
+  document.getElementById("rules").style["color"] = '#E5F9E0';
+  document.getElementById("rules").style["text-align"] = 'center';
+  document.getElementById("rules").style["font-family"] = 'monospace,sans-serif';
+  document.getElementById("rules").style['top'] = (Height / 10).toString() + 'px';
+  document.getElementById("rules").style['left'] = ((window.innerWidth - Width) / 2).toString() + 'px';
+  document.getElementById("rules").style['height'] = (Height).toString() + "px";
+  document.getElementById("rules").style['width'] = Width.toString() + "px";
+  document.getElementById("rules").innerHTML = "<div id='rules x' onclick='closeRules()'></div>";
+  //document.getElementById("rules x").onclick = function(){closeRules()};
+  document.getElementById("rules x").innerHTML = prettyPrint("x", 0, Width - Keysize, Width);
+  document.getElementById("rules x").style['height'] = Keysize.toString() + "px";
+  document.getElementById("rules x").style['width'] = Keysize.toString() + "px";
+  document.getElementById("rules x").style['top'] = "0px";
+  document.getElementById("rules x").style['right'] = "0px";
+  document.getElementById("rules").style['background-color'] = "#2F9C95";
+  document.getElementById("rules").style['font-size'] = parseInt(Keysize * 0.8).toString() + "px";
+  let y = Keysize;
+  document.getElementById("rules").innerHTML += "EXAMPLE: THE CORRECT ANSWER IS <br/><br/><br/><br/><br/>";
+  y += Keysize;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN RULES VERY COMPREHENSIVELY.", y);
+  document.getElementById("rules").innerHTML += "AND YOU GUESS<br/><br/><br/><br/><br/>";
+  y += Keysize * 5;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN QUICKLY AND WELL.", y);
+  document.getElementById("rules").innerHTML += "THE BEGINNING OF YOUR GUESS (EVERYTHING BEFORE THE FIRST INCORRECT CHARACTER) IS<br/><br/><br/>";
+  y += Keysize * 6;
+  document.getElementById("rules").innerHTML += prettyPrint("I EXPLAIN ", y);
+  document.getElementById("rules").innerHTML += "THE GAME WILL PRINT OUT<br/><br/><br/><br/><br/><br/>";
+  y += Keysize * 3;
+  let mode = getCookie("mode");
+  document.getElementById("rules").innerHTML += prettyPrint((update("I EXPLAIN QUICKLY AND WELL.", "I EXPLAIN RULES VERY COMPREHENSIVELY.", getCookie("mode"))).join("*"), y);
+  if (mode == "medium"){
+    document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS ONE OR MORE LETTERS/PUNCTUATION MARKS THAT ARE MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+  }
+  else if (mode == "easy"){
+    document.getElementById("rules").innerHTML += "WHERE EACH * REPRESENTS EXACTLY ONE LETTER/PUNCTUATION MARK MISSING FROM THE BEGINNING OF YOUR GUESS.<br/><br/>";
+  }
+  else{
+    document.getElementById("rules").innerHTML += "WHERE THE LETTERS FROM THE BEGINNING OF THE GUESS ARE PLACED IN ORDER IN THE ANSWER.<br/><br/>";
+  }
+}
+function makeRulesButton(){
+  oc = "onclick='showRules()'";
+  document.getElementById("menu").innerHTML += "<div id='rules button' " + oc + "></div>";
+  document.getElementById("rules button").innerHTML = prettyPrint("RULES", 5 * Keysize + Bound, Bound);
+}
+function openMenu(){
+  MenuOpen = true;
+  document.getElementById("menu").style["width"] = (Width * 3 / 4).toString() + "px";
+  makeHintButton(getCookie("won") != "true");
+  let button_enabled = (getCookie("won") != "true");
+  makeEasyButton(button_enabled);
+  if (getCookie("maxDifficulty") == "easy"){
+    button_enabled = false;
+  }
+  makeMediumButton(button_enabled);
+  if (getCookie("maxDifficulty") == "medium"){
+    button_enabled = false;
+  }
+  makeHardButton(button_enabled);
+  makeCloseButton();
+  makeRulesButton();
+}
+function closeMenu(){
+  MenuOpen = false;
+  document.getElementById("menu").style["width"] = "0px";
+  document.getElementById("menu").innerHTML = "";
+}
+function setCookie(cname, cvalue) {
+  var d = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+  //d.setHours(24,0,0,0);
+  let expires = "expires=" + d;
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  let user = getCookie("username");
+  if (user != "") {
+    alert("Welcome again " + user);
+  } else {
+    user = prompt("Please enter your name:", "");
+    if (user != "" && user != null) {
+      setCookie("username", user, 365);
+    }
+  }
+}
+function shareResults(){
+  let shareSentence = "I solved the ";
+  shareSentence += String(today.getMonth() + 1) + "/" + String(today.getDate());
+  shareSentence += " sentencle in ";
+  let guesses = getCookie("guesses");
+  if (guesses == "1"){
+    shareSentence += (guesses + " guess");
+  }
+  else{
+    shareSentence += (guesses + " guesses");
+  }
+  shareSentence += " on " + getCookie("mode") + " mode";
+  let hints = getCookie("hints");
+  if (hints != ""){
+    if (hints == "1"){
+      shareSentence += ("with " + hints + " hint");
+    }
+    else{
+      shareSentence += ("with " + hints + " hints");
+    }
+  }
+  navigator.clipboard.writeText(shareSentence + ". nadine-jackson.github.io/sentencle");
+  //console.log("why is this happening");
+  document.getElementById("winWord8").innerHTML = "";
+  makeWinWord("COPIED RESULTS", "winWord8", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  makeWinWord("TO CLIPBOARD", "winWord9", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);
+  setTimeout(function(){
+  makeWinWord("SHARE", "winWord8", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  makeWinWord("", "winWord9", (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);}, 3000);
+  }
+</script>
+
+</body>
 </html>
