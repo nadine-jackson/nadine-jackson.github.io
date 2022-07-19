@@ -526,7 +526,7 @@ function makeWinWord(word, id, y){
   document.getElementById(id).style['height'] = Keysize.toString() + "px";
   document.getElementById(id).style['width'] = (Keysize * word.length).toString() + "px";
   document.getElementById(id).style['top'] = (y).toString() + "px";
-  document.getElementById(id).style['background-color'] = "Red";
+  document.getElementById(id).style['background-color'] = "#035E7B";
   document.getElementById(id).style['animation-delay'] = (num / parseFloat(2)).toString() + "s";
   document.getElementById(id).innerHTML = prettyPrint(word, 0, 0, (Keysize * word.length + 1));//, (Width / 2 - Keysize * word.length / 2), Width - Bound);
 }
