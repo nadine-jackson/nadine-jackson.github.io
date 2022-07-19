@@ -1097,16 +1097,20 @@ function shareResults(){
   navigator.clipboard.writeText(shareSentence + ". nadine-jackson.github.io/sentencle");
   //console.log("why is this happening");
   document.getElementById(ShareID).innerHTML = "";
-  makeWinWord("COPIED RESULTS", ShareID, (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  let h = (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8;
+  if (ShareID == "winWord9"){
+    h += Keysize / 2;
+  }
+  makeWinWord("COPIED RESULTS", ShareID, h);
   let nextID = "winWord9";
   if (nextID == ShareID){
     nextID = "winWord10";
   }
-  makeWinWord("TO CLIPBOARD", nextID, (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);
+  makeWinWord("TO CLIPBOARD", nextID, h + Keysize);
   setTimeout(function(){
-  makeWinWord("SHARE", ShareID, (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 8);
+  makeWinWord("SHARE", ShareID, h);
 
-  makeWinWord("", nextID, (Height * 3 / 4 - InputTop) / 2 - Keysize * (9) / 2 + Keysize * 9);}, 3000);
+  makeWinWord("", nextID, h + Keysize);}, 3000);
   }
 </script>
 
