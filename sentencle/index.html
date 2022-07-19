@@ -409,6 +409,14 @@ function makeKeys(){
   y = (kbh - (4 * keyHeight + 3 * spaceSize)) / 2 + 2 * keyHeight + 2 * spaceSize;
   makeKey(c, x, y, keyWidth * 2 + spaceSize, keyHeight);
   }
+  function makeInfo(){
+    let prev_guesses_str = getCookie("prev_guesses");
+    let prev_guesses = prev_guesses_str.split("-");
+    Level = 6 * Keysize * prev_guesses.length + Height / 4;
+    if (prev_guesses.length > 0){
+      document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
+    }
+  }
 function makeAll(){
   Width = window.innerWidth;
   Height = window.innerHeight;
@@ -443,6 +451,7 @@ function makeAll(){
   if (RulesOpen){
     showRules();
   }
+  makeInfo();
 }
 
 function prettyPrint(s, y0, lbound = Bound, rbound = Width - Bound){
