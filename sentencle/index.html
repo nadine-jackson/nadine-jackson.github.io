@@ -358,8 +358,6 @@ function makeKey(c, x, y, w=Keysize, h=Keysize){
   document.getElementById(keyID).style["touch-action"] = "manipulation";
 }
 function makeKeys(){
-
-
   //document.getElementById("banner").innerHTML = dd + "/" + mm + "/" + yyyy;
   board = ["?.!", "QWERTYUIOP", "ASDFGHJKL,", "ZXCVBNM1"];
   kbh = Height/4;
@@ -414,7 +412,7 @@ function makeKeys(){
     let prev_guesses = prev_guesses_str.split("-");
     Level = 6 * Keysize * prev_guesses.length + Height / 4;
     if (prev_guesses.length > 0){
-      document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
+      document.getElementById("info").innerHTML = "test";//"<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
     }
   }
 function makeAll(){
@@ -439,6 +437,7 @@ function makeAll(){
   makeGame();
   makeBanner();
   makeKeys();
+  makeInfo();
   if (getCookie("won") == "true"){
     winSequence();
   }
@@ -451,7 +450,6 @@ function makeAll(){
   if (RulesOpen){
     showRules();
   }
-  makeInfo();
 }
 
 function prettyPrint(s, y0, lbound = Bound, rbound = Width - Bound){
@@ -612,12 +610,7 @@ function enterPressed(){
     setCookie("won", "true");
     winSequence();
   }
-  let prev_guesses_str = getCookie("prev_guesses");
-  let prev_guesses = prev_guesses_str.split("-");
-  Level = 6 * Keysize * prev_guesses.length + Height / 4;
-  if (prev_guesses.length > 0){
-    document.getElementById("info").innerHTML = "<div id=\"infobox\" style=\"height: "+ Level.toString() + "px;\ntop: "+ parseInt(Height * 0.75) +"px;\nleft: "+ (window.innerWidth / 2 - Width / 2).toString() +"px;\nwidth: "+ parseInt(Width) +"px;\n\">" + printAll(prev_guesses, goalSentence) + "</div>";
-  }
+  makeInfo();
   if (! prev_guesses.includes(current.join("*")) && "*" != current.join("*")){
     prev_guesses.push(current.join("*"));
     setCookie("prev_guesses", prev_guesses.join("-"));
