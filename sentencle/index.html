@@ -959,11 +959,7 @@ function makeHardButton(active){
     document.getElementById("hard button").style['opacity'] = "0.5";
   }
 }
-function makeCloseButton(){
-  oc = "onclick='closeMenu()'";
-  document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
-  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 4 * Keysize + Bound, Bound);
-}
+
 function closeRules(){
   RulesOpen = false;
   document.getElementById('rules').innerHTML = "";
@@ -1016,7 +1012,12 @@ function showRules(){
 function makeRulesButton(){
   oc = "onclick='showRules()'";
   document.getElementById("menu").innerHTML += "<div id='rules button' " + oc + "></div>";
-  document.getElementById("rules button").innerHTML = prettyPrint("RULES", 5 * Keysize + Bound, Bound);
+  document.getElementById("rules button").innerHTML = prettyPrint("RULES", 4 * Keysize + Bound, Bound);
+}
+function makeCloseButton(){
+  oc = "onclick='closeMenu()'";
+  document.getElementById("menu").innerHTML += "<div id='close button' " + oc + "></div>";
+  document.getElementById("close button").innerHTML = prettyPrint("CLOSE", 5 * Keysize + Bound, Bound);
 }
 function openMenu(){
   MenuOpen = true;
@@ -1032,8 +1033,9 @@ function openMenu(){
     button_enabled = false;
   }
   makeHardButton(button_enabled);
-  makeCloseButton();
   makeRulesButton();
+  makeCloseButton();
+
 }
 function closeMenu(){
   MenuOpen = false;
