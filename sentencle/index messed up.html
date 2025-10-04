@@ -303,7 +303,7 @@
         }
         
         function mobileClickLetter(p){
-            lightLetter(p);
+            //lightLetter(p);
             press(p);
         }
         function keyLightLetter(e){
@@ -350,11 +350,11 @@
                 inner = "";
             }
             let md = " onmousedown=\"mouseClickLetter('" + pressed + "')\"";
-            let mov = " onmouseover=\"mouseDarkLetter('" + pressed + "')\"";
-            let mo = " onmouseout=\"lightLetter('" + pressed + "')\"";
-            let ts = " ontouchstart=\"mobileDarkLetter('" + pressed + "')\"";
+            //let mov = " onmouseover=\"mouseDarkLetter('" + pressed + "')\"";
+            //let mo = " onmouseout=\"lightLetter('" + pressed + "')\"";
+            //let ts = " ontouchstart=\"mobileDarkLetter('" + pressed + "')\"";
             let te = " ontouchend=\"mobileClickLetter('" + pressed + "')\"";
-            return "<button type='button' " + md + mov + mo + ts + te + "\
+            return "<button type='button' " + md + te + "\
             class='button' \
             id='" + name + "'>" + inner + "</button>";
             document.getElementById(name).addEventListener('touchend', event => {
@@ -1081,7 +1081,12 @@
                 disableClicks();
             }
             menuOpen = false;
-            goalSentence = SentenceBank[parseInt(mm) - 1][parseInt(dd) - 1].toUpperCase();
+            if (parseInt(dd) > 29){
+                goalSentence = "X X X X X.";
+            }
+            else{
+                goalSentence = SentenceBank[parseInt(dd) - 1].toUpperCase();
+            }
             if (getCookie("hints") == ""){
                 setCookie("hints", "0");
             }

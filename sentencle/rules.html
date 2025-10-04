@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sentencle Rules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./favicon2.png?v=2"></link>
+
+    <meta name="viewport" content="initial-scale=1.0,width=device-width" /></meta>
+
+  <link rel="stylesheet" href="style.css"></link>
+  
+</head>
+<body onLoad="makeAll()">
+    <script>
+        var gray = "#404040";
+        var red = "#631f1f";
+        var green = "#218976";
+        function makeLetter(l, c=green){
+            if (l == " "){
+                return "<div class='letter' style='color:" + c + ";background-color:" + c + ";display:inline-block;float:none;'>,</div>";
+            }
+            return "<div class='letter' style='background-color:" + c + ";display:inline-block;float:none;'>" + l +"</div>";
+        }
+        function makeLetters(str, c=green){
+            let ret = "";
+            for (letter of str){
+                ret += makeLetter(letter, c);
+            }
+            return ret;
+        }
+        function makeAll(){
+            document.body.innerHTML += "<a href='./index.html'>" + makeLetters("BACK TO THE GAME", red) + "</a><br/><br/>"; //letter link
+            document.body.innerHTML += makeLetters("RULES") + "<br/><br/>"; //big letters
+            document.body.innerHTML += "Figure out the five word sentence!<br/><br/>";
+            document.body.innerHTML += "After you submit a guess (any combination of characters), the game will reveal all of \
+            the characters (including letters, spaces, and punctuation) you guessed correctly \
+            (greenish blue) before your first incorrect character (red) in the order they appear in the sentence. \
+            Everything after your first incorrect character will be discarded and grayed out.<br/><br/>";
+            document.body.innerHTML += "The correctly guessed characters will be separated by ";
+            document.body.innerHTML += makeLetter("*", gray);
+            document.body.innerHTML += "s, where each ";
+            document.body.innerHTML += makeLetter("*", gray);
+            document.body.innerHTML += " represents one or more of the other characters from the hidden sentence that you didn't guess. <br/>";
+            document.body.innerHTML += "Example: The hidden sentence is \"ARE YOU READY TO PLAY?\"<br/><br/>";
+            document.body.innerHTML += "You guess: ";
+            document.body.innerHTML += makeLetters("ARE YOU READY TO ", green); //colored letters
+            document.body.innerHTML += makeLetters("W", red); //colored letters
+            document.body.innerHTML += makeLetters("IN?", gray) + "<br/><br/>"; //colored letters
+            document.body.innerHTML += "All of the letters up to ";
+            document.body.innerHTML += makeLetter("W", red); //letter
+            document.body.innerHTML += " are in the hidden sentence, so you'll see: ";
+            document.body.innerHTML += makeLetters("ARE YOU READY TO ", green); //colored letters
+            document.body.innerHTML += makeLetter("*", gray); //colored letters
+            document.body.innerHTML += makeLetters("AY", green); //colored letters
+            document.body.innerHTML += makeLetter("*", gray); //colored letters
+            document.body.innerHTML += makeLetters("?", green); //colored letters
+            document.body.innerHTML += "<br/><br/>"; //colored letters
+            document.body.innerHTML += "The first "; 
+            document.body.innerHTML += makeLetter("*", gray); //colored letters
+            document.body.innerHTML += " represents ";
+            document.body.innerHTML += "\"PL\""; //letters
+            document.body.innerHTML += " from the hidden sentence and the second ";
+            document.body.innerHTML += makeLetter("*", gray); //colored letters
+            document.body.innerHTML += " represents ";
+            document.body.innerHTML += "\"?\""; //letter
+            document.body.innerHTML += " from the hidden sentence.<br/><br/>";
+            document.body.innerHTML += "Keep guessing until you reveal the entire sentence.<br/><br/>";
+            document.body.innerHTML += "If you get stumped, there's a hint button in the menu that submits a helpful guess for you.<br/><br/>";
+            document.body.innerHTML += "Are you ready to play? <br/><br/>";
+            document.body.innerHTML += "<a href='./index.html'>" + makeLetters("BACK TO THE GAME", red) + "</a>"; //letter link
+            redraw();
+        }
+        function redraw(){
+            document.body.style.fontSize = (window.innerHeight / 20).toString() + "px";
+            for (letter of document.getElementsByClassName("letter")){
+                letter.style.height = (window.innerHeight / 15).toString() + "px";
+                letter.style.width = (window.innerHeight / 15).toString() + "px";
+            }
+
+        }
+    </script>
+
+</body>
+</html>
