@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Wordflower Project Page</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="./favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Wordflower Project</h1>
+        <br/><i>An interactive art project that turns words into symmetrical animated designs.</i><br/><br/>
+    <img src="./pics/wf_display.jpg"></img>
+        <h3>Why did I make this?</h3>
+    <p>I came up with this concept as part of a class (CS 73: Code, Data, and Art). I wanted to create an art project that visualized data (the data being any set of words), and turned it into an art piece. I liked the idea that this art piece would be able to visualize any set of words, rather than being specialized for a particular kind of data.</p>
+    <h3>What was the process?</h3>
+    <p>I wrote the code in p5.js, a JavaScript library specialized for digital generative and interactive art projects. I created a system for turning any word into a squiggle.</p>
+    <p>First, I created a location for each letter of the alphabet on a circle. The distance from the center was the letter's place in tha alphabet. (Earlier letters are closer to the center, later letters are further away.) The angle of the letter was based on its frequency in the English language. By representing two pieces of data about every letter, I hoped to avoid having letters too close together too often, as that would lead to less interesting squiggles. By creating a wiggly line between the point representing each letter, I get a squiggle for every word.</p>
+    <p>Once each word had a squiggle, I liked the look of duplicating the squiggle 12 times to create a symmetrical design for each word. Since the appearance resembled a flower, I called the program WordFlower.</p>
+    <img src="./pics/wf_edit.jpg"></img>
+    <p>I then added functionality for the user to be able to edit the words. I created a second screen in hacker-green that allowed words to be inputted one at a time or all at once.</p>
+    <h3>How do I use it?</h3>
+    <img src="./pics/wf_layout.jpg"></img>
+    <p>Once on the wordflower page (link below), simply click/tap the screen to get started and then input whatever words or sentences you would like to visualize. Then click/tap again to return to the main screen.</p>
+    <h3>Where can I see Wordflower?</h3>
+    <p><a href="https://www.viviandelphine.com/wordflower">Right here!</a></p>
+    <p><a href="./index.html">More Projects</a></p>
+    <p>© 2024 Nadine Jackson</p>
+    <div id="follower"></div>
+    <script>
+        const follower = document.getElementById("follower");
+        window.ontouchstart = e =>{
+            document.getElementById("follower").style.display = "none";
+        }
+        window.onmousemove = e => {
+            const x = e.clientX - follower.offsetWidth / 2,
+            y = e.clientY - follower.offsetHeight / 2;
+            document.getElementById("follower").animate([
+            { transform: 'translate(' +(x).toString() + 'px,' +(y).toString() + 'px)' }
+            ], {
+            duration: 1000,
+            iterations: 1,
+            fill: "forwards"
+            });
+        }
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('a') !== null) {
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(8vw, 8vh)",
+                    height: "max(8vw, 8vh)",
+                    backgroundColor: "#5555FF",
+                    borderRadius: "max(4vw, 4vh)"
+                }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+            else{
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(5vw, 5vh)",
+                    height: "max(5vw, 5vh)",
+                    backgroundColor: "#404040",
+                    borderRadius: "max(2.5vw, 2.5vh)"
+                 }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+        })
+    </script>
+</body>
+</html>

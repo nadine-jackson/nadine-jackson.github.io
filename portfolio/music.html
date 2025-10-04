@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Music Project Page</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="./favicon.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Music Page</h1>
+        <br/><i>A website to share my musical projects.</i><br/><br/>
+        <img src="./pics/music_main.jpg"></img>
+    <h3>Why did I make this?</h3>
+    <p>I wanted a home to share all of my music in all places it was available that I could customize to my liking. I was inspired by <a href="https://www.radiohead.com/library/">Radiohead's "Public Library"</a> where they display all of the media associated with each album.</p>
+    <h3>What was the process?</h3>
+    <img src="./pics/music_theme.jpg"></img>
+    <p>In this project, I decided to focus more on using CSS than relying on JavaScript. I created a grid of my four musical projects and then created a themed landing page for each album, using matching colors and fonts where possible. I then included a miniplayer for each streaming service so that the user can listen to the music while staying on the site.</p>
+    <img src="./pics/music_miniplayer.jpg"></img>
+    <h3>Where can I see this music page?</h3>
+    <p><a href="https://www.viviandelphine.com/music">Right here!</a></p>
+    <p><a href="./index.html">More Projects</a></p>
+    <p>© 2024 Nadine Jackson</p>
+    <div id="follower"></div>
+    <script>
+        const follower = document.getElementById("follower");
+        window.ontouchstart = e =>{
+            document.getElementById("follower").style.display = "none";
+        }
+        window.onmousemove = e => {
+            const x = e.clientX - follower.offsetWidth / 2,
+            y = e.clientY - follower.offsetHeight / 2;
+            document.getElementById("follower").animate([
+            { transform: 'translate(' +(x).toString() + 'px,' +(y).toString() + 'px)' }
+            ], {
+            duration: 1000,
+            iterations: 1,
+            fill: "forwards"
+            });
+        }
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('a') !== null) {
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(8vw, 8vh)",
+                    height: "max(8vw, 8vh)",
+                    backgroundColor: "#5555FF",
+                    borderRadius: "max(4vw, 4vh)"
+                }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+            else{
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(5vw, 5vh)",
+                    height: "max(5vw, 5vh)",
+                    backgroundColor: "#404040",
+                    borderRadius: "max(2.5vw, 2.5vh)"
+                 }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+        })
+    </script>
+</body>
+</html>

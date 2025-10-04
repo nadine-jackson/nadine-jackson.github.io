@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="./favicon.png">
+    <title>Clock Project Page</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Abstract Clock Project</h1>
+        <br/><i>An artistic animated clock that displays the time using falling blocks.</i><br/>
+        <img src="./pics/clock_display.jpg"></img>
+    <h3>Why did I make this?</h3>
+    <p>I came up with this concept as part of a class (CS 73: Code, Data, and Art), where the assignment was to create an abstract clock. I wanted to represent time passing with obects that move through the screen in a way that would result in visually satisfying transitions. However, we were not allowed to use numbers (countable objects were fair game, however). Therefore, I decided to translate the language of the analog clock into a clock with twelve countable objects.</p>
+    <h3>What was the process?</h3>
+    <p>I wrote the code in p5.js, a JavaScript library specialized for digital generative and interactive art projects. I started with the visual concept of falling blocks that bounce back and forth across the screen. I used a parabolic motion to mimic how objects move in the real world when pulled by Earth's gravity.</p>
+    <p> I then decided to use twelve blocks in a grid to represent time similarly to an analog clock. I decided that outlines would represent hours and shading would represent minutes, since those were the clearest two features I could edit on the block. I could also add up to four smaller blocks on one of the larger blocks to represent individual minutes (while the larger blocks represented multiples of five). Since the blocks were square, adding up to four smaller blocks could be done at each of the square's four corners. Lastly, seconds could be represented with an animation where each large square is "filled up" by a smaller square every minute.</p>
+    <img src="./pics/clock_layout.jpg"></img>
+    <p>Once I had implemented those features and added a few additional features to make the transitions smoother, the clock was complete. I then added a simple, non-intrusive menu with information about how to read the clock.</p>
+    <img src="./pics/clock_menu.jpg"></img>
+    <p>The most challenging part of this project was making each transition smooth. I wanted this to be visually pleasing and easy to use, so at the end of each minute, there had to be extra code so that one minute smoothly transitioned into the next, and I had to tweak the movement function to make the falling blocks fall at a comfortable rate. Additionally, the menu had to be easy to use, open and close. The basic functionality was not too complex, but the extra pieces of code that made the functionality smoother took most of the time.</p>
+    <h3>How do I read it?</h3>
+    <img src="./pics/clock_individual.jpg"></img>
+    <p>There are 12 large squares on the screen at any given time (4 columns of 3). Think of them as the 12 numerals on an analog clock. The number of squares with a blue outline represents the hour. For example, at 1AM or 1PM, one square is blue. At 7AM or 7PM, seven squares are blue.</p>
+    <p>Like the minute hand on an analog clock, this clock uses multiples of five to represent minutes. The number of large squares with fully shaded gray interiors multiplied by five is the approximate current minute count. Then, to get the exact minute, there are smaller gray squares, each representing one additional minute. For example, at 12:23, there are 4 large gray-shaded squares (4 * 5 = 20 minutes) and 3 small gray-shaded squares. Therefore, we have 20 minutes from large squares and 3 minutes from small squares, for a total of 23 minutes past the hour.</p>
+    <h3>Where can I see this clock?</h3>
+    <p><a href="https://www.viviandelphine.com/clock">Right here!</a></p>
+    <p><a href="./index.html">More Projects</a></p>
+    <p>© 2024 Nadine Jackson</p>
+    <div id="follower"></div>
+    <script>
+        const follower = document.getElementById("follower");
+        window.ontouchstart = e =>{
+            document.getElementById("follower").style.display = "none";
+        }
+        window.onmousemove = e => {
+            const x = e.clientX - follower.offsetWidth / 2,
+            y = e.clientY - follower.offsetHeight / 2;
+            document.getElementById("follower").animate([
+            { transform: 'translate(' +(x).toString() + 'px,' +(y).toString() + 'px)' }
+            ], {
+            duration: 1000,
+            iterations: 1,
+            fill: "forwards"
+            });
+        }
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('a') !== null) {
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(8vw, 8vh)",
+                    height: "max(8vw, 8vh)",
+                    backgroundColor: "#5555FF",
+                    borderRadius: "max(4vw, 4vh)"
+                }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+            else{
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(5vw, 5vh)",
+                    height: "max(5vw, 5vh)",
+                    backgroundColor: "#404040",
+                    borderRadius: "max(2.5vw, 2.5vh)"
+                 }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+        })
+    </script>
+</body>
+</html>

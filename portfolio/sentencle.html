@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sentencle Project Page</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="./favicon.png">
+</head>
+<body>
+    <h2>Sentencle Game</h1>
+        <br/><i>A web-based language puzzle game where users guess five-word sentences.</i><br/><br/>
+        <img src="./pics/sent_display.jpg">
+    <h3>Why did I make this?</h3>
+    <p>I wanted to teach myself JavaScript (after having used Java and C in the past) in order to create an interactive webpage people could actually use. The mechanics of the game were inspired by stretching Wordle into a sentence format and adjusting the rules to not be too easy or difficult.</p>
+    <h3>What was the process?</h3>
+    <p>I started with a simple HTML file with some JavaScript and I created the most basic playable game to test on some friends and family. Everyone said it was far too dificult and barely had the patience to finish a single game, which told me I needed to change the ruleset. I had the game give more information back to the user and continued adjusting the game until people started to enjoy it.</p>
+    <img src="./pics/sent_layout.jpg"></img>
+    <p>I then worked on the layout and made the game compatible with phones. I learned about the challenges with of touch screens and I added some extra features such as sound effects and a win screen that allowed players to share the game with family and friends.</p>
+    <img src="./pics/sent_end.jpg"></img>
+    <p>I then came up with one five word sentence for every day of the year. It took awhile to find sentences that would be a satisfying answer to the game, while having the correct number of words and being gramatically complete. I searched idioms, movie quotes, and song lyrics. With the list of sentences and a layout redesign, the game was complete.</p>
+    <h3>How does the game work?</h3>
+    <img src="./pics/sent_guess.jpg"></img>
+    <p>Every day, the answer is a five word sentence. When you make a guess, the game takes the beginning of your guess, up until the first incorrect character (a character is a letter, space, or punctuation mark), and gives back every correct character from the beginning of your guess in the order that they appear in the sentence. You can then continue guessing until you get the answer and if you're really stumped, you can ask for a hint.</p>
+    <h3>Where can I play?</h3>
+    <p><a href="https://www.viviandelphine.com/sentencle">Right here!</a></p>
+    <p><a href="./index.html">More Projects</a></p>
+    <p>© 2024 Nadine Jackson</p>
+    <div id="follower"></div>
+    <script>
+        const follower = document.getElementById("follower");
+        window.ontouchstart = e =>{
+            document.getElementById("follower").style.display = "none";
+        }
+        window.onmousemove = e => {
+            const x = e.clientX - follower.offsetWidth / 2,
+            y = e.clientY - follower.offsetHeight / 2;
+            document.getElementById("follower").animate([
+            { transform: 'translate(' +(x).toString() + 'px,' +(y).toString() + 'px)' }
+            ], {
+            duration: 1000,
+            iterations: 1,
+            fill: "forwards"
+            });
+        }
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('a') !== null) {
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(8vw, 8vh)",
+                    height: "max(8vw, 8vh)",
+                    backgroundColor: "#5555FF",
+                    borderRadius: "max(4vw, 4vh)"
+                }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+            else{
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(5vw, 5vh)",
+                    height: "max(5vw, 5vh)",
+                    backgroundColor: "#404040",
+                    borderRadius: "max(2.5vw, 2.5vh)"
+                 }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+        })
+    </script>
+</body>
+</html>

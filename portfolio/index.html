@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Nadine's Portfolio</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="./favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Nadine's Portfolio</h1>
+    <p>I'm an aspiring software engineer with a love for design. Here are some projects I've created!</p>
+    <h3>Sentencle (2022-2023)</h3>
+    <p>A web-based language puzzle game where users guess five-word sentences.</p>
+    <a href="./sentencle.html">More about sentencle.</a> — <a href="https://www.viviandelphine.com/sentencle">Try it out!</a>
+    <h3>Wordflower (2023-2024)</h3>
+    <p>An interactive art project that turns words into symmetrical animated designs.</p>
+    <a href="./wordflower.html">More about wordflower.</a> — <a href="https://www.viviandelphine.com/wordflower">Visualize some words.</a>
+    <h3>Clock (2023-2024)</h3>
+    <p>An artistic animated clock that displays the time using falling blocks.</p>
+    <a href="./clock.html">More about the clock.</a> — <a href="https://www.viviandelphine.com/clock">What time is it?</a>
+    <h3>Vivian Delphine Music Page (2023-2024)</h3>
+    <p>A website to share my musical projects.</p>
+    <a href="./music.html">More about the music page.</a> — <a href="https://www.viviandelphine.com/music">Hear some tunes.</a>
+    <br/><br/><p>Email me at <a id="hidey"></a>.</p>
+    <p>Connect on <a href="https://www.linkedin.com/in/nadine-jackson/">LinkedIn</a>.</p>
+    <p>© 2024 Nadine Jackson</p>
+    <div id="follower"></div>
+    <script>
+        const follower = document.getElementById("follower");
+        window.ontouchstart = e =>{
+            document.getElementById("follower").style.display = "none";
+        }
+        window.onmousemove = e => {
+            /*const interactable = e.target.closest(".interactable"),
+                interacting = interactable !== null;*/
+
+            const x = e.clientX - follower.offsetWidth / 2,
+            y = e.clientY - follower.offsetHeight / 2;
+            document.getElementById("follower").animate([
+            // key frames
+            { transform: 'translate(' +(x).toString() + 'px,' +(y).toString() + 'px)' }
+            ], {
+            // sync options
+            duration: 1000,
+            iterations: 1,
+            fill: "forwards"
+            });
+            
+            /*if (interacting){
+                console.log("howdy");
+                document.getElementById("follower").animate([
+                // key frames
+                { color: "#FF0000" }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }*/
+        }
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('a') !== null) {
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(8vw, 8vh)",
+                    height: "max(8vw, 8vh)",
+                    backgroundColor: "#5555FF",
+                    borderRadius: "max(4vw, 4vh)"
+                }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+            else{
+                document.getElementById("follower").animate([
+                // key frames
+                { 
+                    width: "max(5vw, 5vh)",
+                    height: "max(5vw, 5vh)",
+                    backgroundColor: "#404040",
+                    borderRadius: "max(2.5vw, 2.5vh)"
+                 }
+                ], {
+                // sync options
+                duration: 100,
+                iterations: 1,
+                fill: "forwards"
+                });
+            }
+        })
+        window.onload = function(){
+      var left = "nzazzzdzzizzznzze";
+      var right = "dzzezzlzpzzzzhzzizznzzezz.zzczzozzmz";
+      function fix(word){
+        ret = "";
+        for (letter in word){
+          if (word[letter] != 'z'){
+            ret += word[letter];
+          }
+        }
+        return ret;
+      }
+      left = fix(left);
+      right = fix(right);
+      var result = left + "@vivian" + right;
+      document.getElementById('hidey').innerHTML = result;
+      var mt = fix("mzzaizzzltozzzzzz:")
+      document.getElementById('hidey').href = "mailto:" + result;
+    }
+        /*
+        const keyframes = {
+            transform: `translate(${x}px, ${y}px) scale(${interacting ? 8 : 1})`
+        }
+        
+        trailer.animate(keyframes, { 
+            duration: 800, 
+            fill: "forwards" 
+        });*/
+        
+    </script>
+</body>
+</html>
