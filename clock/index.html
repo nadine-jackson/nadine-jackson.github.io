@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Clock</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
+    <script src="clock.js"></script>
+  </head>
+  <body style="margin:0;padding:0">
+    <main>
+    </main>
+    <div id="menu" onclick="menuOpen()">
+      <div id="plus" class="straight" onclick="menuOpen()">
+        <div class="vertical"></div><div class="horizontal"></div>
+      </div>
+      <div id="minus"  onclick="menuClose()">
+        <div class="horizontal"></div>
+      </div>
+      <div id="info" onclick="toggInstr()">?
+      </div> 
+      <div id="panel" onclick="null">
+        <h1>How do you read this clock?</h1>
+        <p>There are 12 large squares on the screen at any given time (4 columns of 3). Think of them as the 12 numerals on an analog clock. The number of squares with a blue outline represents the hour. For example, at 1AM or 1PM, one square is blue. At 7AM or 7PM, seven squares are blue.</p>
+        <p>Like the minute hand on an analog clock, this clock uses multiples of five to represent minutes. The number of large squares with fully shaded gray interiors multiplied by five is the approximate current minute count. Then, to get the exact minute, there are smaller gray squares, each representing one additional minute. For example, at 12:23, there are 4 large gray-shaded squares (4 * 5 = 20 minutes) and 3 small gray-shaded squares. Therefore, we have 20 minutes from large squares and 3 minutes from small squares, for a total of 23 minutes past the hour.</p>
+      </div>
+    </div>
+    <div id="bigButton"></div>
+    <script>
+      var isOpen = false;
+      var menu = document.getElementById("menu");
+      var info = document.getElementById("info");
+      var minus = document.getElementById("minus");
+      var plus = document.getElementById("plus");
+      var panel = document.getElementById("panel");
+      var instr = false;
+      function menuOpen(){
+        isOpen = true;
+        menu.style.width = "30vw";
+        menu.onclick = null;
+        plus.onclick = hideMenu;
+        info.style.opacity = "1";
+        minus.style.opacity = "1";
+        menu.style.cursor = "default";
+        plus.style.cursor = "pointer";
+        minus.style.cursor = "pointer";
+        info.style.cursor = "pointer";
+        plus.style.transform = "rotate(-45deg)";
+        instr = false;
+      }
+      function menuClose(){
+        isOpen = false;
+        menu.style.width = "10vw";
+        info.style.opacity = "0";
+        minus.style.opacity = "0";
+        plus.style.transform = "rotate(0deg)";
+        plus.onclick = menuOpen;
+        hideInstr();
+      }
+      function closeChanges(){
+        menu.style.zIndex = "-1"; 
+        menuClose();
+        document.getElementById("bigButton").onclick = showMenu;
+      }
+      function hideMenu(){
+        menu.style.opacity = "0";
+        setTimeout(closeChanges, 1000);
+      }
+      function showMenu(){
+        menu.style.zIndex = "998";
+        menu.style.opacity = "1";
+      }
+      function showInstr(){
+        panel.style.display = "block";
+      }
+      function hideInstr(){
+        panel.style.display = "none";
+      }
+      function toggInstr(){
+        if (!instr){
+          showInstr();
+        }
+        else{
+          hideInstr();
+        }
+        instr = !instr;
+      }
+    </script>
+  </body>
+</html>

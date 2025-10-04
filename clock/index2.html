@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Clock</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
+    
+  </head>
+  <body style="margin:0;padding:0">
+    <main>
+    </main>
+    <div id="menu" onclick="menuOpen()">
+      <div id="plus" class="straight">
+        <div class="vertical"></div><div class="horizontal"></div>
+      </div>
+      <div id="minus"  onclick="menuClose()">
+        <div class="horizontal"></div>
+      </div>
+      <div id="info" >?</div> 
+    </div>
+    <script>
+      var isOpen = false;
+      var menu = document.getElementById("menu");
+      var info = document.getElementById("info");
+      var minus = document.getElementById("minus");
+      var plus = document.getElementById("plus");
+      function menuOpen(){
+        isOpen = true;
+        menu.classList.toggle("narrow");
+        menu.classList.toggle("wide");
+        menu.onclick = null;
+        //info.style.opacity = "1";
+        //minus.style.opacity = "1";
+        //plus.style.transform = "rotate(-45deg)";
+        //menu.style.backgroundColor = "green";
+
+        /*document.getElementById("minus").style.display = "block";
+        document.getElementById("info").style.display = "block";
+        var menu = document.getElementById("menu");
+        menu.style.animationName ="widen";
+        document.getElementById("plus").style.animationName ="twirl";
+        document.getElementById("info").style.animationName ="fadeIn";
+        document.getElementById("minus").style.animationName ="fadeIn";*/
+      }
+      function menuClose(){
+        console.log("closing...");
+        isOpen = false;
+        menu.classList.toggle("wide");
+        menu.classList.toggle("narrow");
+        //info.style.opacity = "0";
+        //console.log(menu.style.width);
+        //info.style.opacity = "0";
+        //minus.style.opacity = "0";
+        //plus.style.transform = "rotate(0deg)";
+        /*isOpen = false;
+        //set time out on this:
+        //document.getElementById("minus").style.display = "none";
+        //document.getElementById("info").style.display = "none";
+        var menu = document.getElementById("menu");
+        menu.classList.remove("wide");
+        menu.classList.add("narrow");
+        menu.style.animationName ="shrink";
+        document.getElementById("plus").style.animationName ="twirlBack";
+        document.getElementById("info").style.animationName ="fadeOut";
+        document.getElementById("minus").style.animationName ="fadeOut";
+        //menu.innerHTML = "? x -";*/
+      }
+    </script>
+  </body>
+</html>
